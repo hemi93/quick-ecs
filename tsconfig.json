@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "lib": ["es2015", "dom"],
+    "target": "es5",
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "strict": true,
+    "baseUrl": "./src/",
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "downlevelIteration": true,
+    "esModuleInterop": true,
+    "outDir": "./build",
+    "declaration": true,
+    "removeComments": true,
+    "isolatedModules": true
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.test.ts"]
+}
