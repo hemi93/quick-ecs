@@ -1,0 +1,30 @@
+{
+  "name": "quick-ecs",
+  "version": "0.0.1",
+  "main": "./build/index.js",
+  "author": "Maciej Wądołkowski <maciejwadolkowski@gmail.com>",
+  "description": "Bring ECS architecture to JS project in quick, simple and powerful manner.",
+  "license": "MIT",
+  "dependencies": {
+    "memoizee": "^0.4.14"
+  },
+  "homepage": "https://github.com/hemi93/quick-ecs",
+  "devDependencies": {
+    "@types/jest": "^24.0.23",
+    "@types/memoizee": "^0.4.3",
+    "@typescript-eslint/eslint-plugin": "^2.11.0",
+    "@typescript-eslint/parser": "^2.11.0",
+    "eslint": "^6.7.2",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.2.0",
+    "typescript": "^3.7.3"
+  },
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint ./src/**/*.ts",
+    "test": "jest"
+  },
+  "files": [
+    "build"
+  ]
+}
