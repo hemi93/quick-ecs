@@ -90,7 +90,7 @@ interface IExampleEngine {
   runRenderLoop(renderFunction: () => void): void
 }
 
-export const main = async ({timer, onBeforeFrameRender}: IExampleEngine) => {
+export const main = async ({timer, runRenderLoop}: IExampleEngine) => {
   // Create World and add system
   const world = new World<IExampleDependencies>({ timer });
   world.addSystem(ExampleSystem);
