@@ -3,11 +3,12 @@
   "version": "0.0.1",
   "main": "./build/index.js",
   "author": "Maciej Wądołkowski <maciejwadolkowski@gmail.com>",
-  "license": "UNLICENSED",
-  "private": true,
+  "description": "Bring ECS architecture to JS project in quick, simple and powerful manner.",
+  "license": "MIT",
   "dependencies": {
     "memoizee": "^0.4.14"
   },
+  "homepage": "https://github.com/hemi93/quick-ecs",
   "devDependencies": {
     "@types/jest": "^24.0.23",
     "@types/memoizee": "^0.4.3",

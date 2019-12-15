@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Library dedicated to bringing ECS pattern to JS project in quick and simple, but also powerful manner.
+Bring ECS architecture to JS project in quick, simple and powerful manner.
 Currenly in early stages of development, but already delivering basic toolset. Contributors are welcome!
 
 ## Features
@@ -11,10 +11,10 @@ Currenly in early stages of development, but already delivering basic toolset. C
 - Lifecycle methods for Systems (init, preUpdate, update) that allow for easy setup
 - You can define any combination of Components for System at startup
 - Minimal amount of package dependencies (which is planned to be reduced to 0)
+- Tiny, less than 8 kB packed!
+- Supports method chaining for convenient entity manipulation
 
 ## Installation
-
-Install package:
 
 ```bash
 yarn add quick-ecs
@@ -93,7 +93,7 @@ export const main = async ({timer, onBeforeFrameRender}: IExampleEngine) => {
   world.addSystem(ExampleSystem);
 
   /**
-   * Create entity and add component to it.
+   * Create Entity and add Component to it.
    * Second argument of addComponent accepts array of constructor params, type safe!
    */
   const entity = world.createEntity();

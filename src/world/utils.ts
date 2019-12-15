@@ -1,9 +1,9 @@
-import memoize from 'memoizee';
+import memoize from "memoizee";
 
-import { IEntity } from '../entity/types';
-import { ISystem } from '../system/types';
-import { ComponentConstructor, TSystemComponents } from '../types';
-import { TEntityComponentMap } from './types';
+import { IEntity } from "../entity/types";
+import { ISystem } from "../system/types";
+import { ComponentConstructor, TSystemComponents } from "../types";
+import { TEntityComponentMap } from "./types";
 
 /**
  * Check if all components (by names) are present in components map.

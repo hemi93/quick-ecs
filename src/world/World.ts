@@ -5,7 +5,8 @@ import { ComponentConstructor, TSystemComponents } from "../types";
 import { IWorld, TEntityComponentMap } from "./types";
 import { collectEntities, fallbackConstructorArgs } from "./utils";
 
-export default class World<TDependencies extends object> implements IWorld {
+export default class World<TDependencies extends object>
+  implements IWorld<TDependencies> {
   private _entitiesMap: TEntityComponentMap;
   private readonly _dependencies: TDependencies;
   private readonly _systems: ISystem[] = [];
@@ -19,10 +20,9 @@ export default class World<TDependencies extends object> implements IWorld {
     U extends TSystemComponents,
     T extends ComponentConstructor<ISystem<U, TDependencies>>
   >(
-    Constructor: T,
-    initialValues?: ConstructorParameters<T>
-  ): IWorld => {
-    const instance = new Constructor(...fallbackConstructorArgs(initialValues));
+    Constructor: T
+  ): IWorld<TDependencies> => {
+    const instance = new Constructor();
 
     this._systems.push(instance);
 
@@ -74,7 +74,11 @@ export default class World<TDependencies extends object> implements IWorld {
   public getEntityComponents = (entity: IEntity) =>
     this._entitiesMap.get(entity);
 
-  private getEntities = (components: TSystemComponents): readonly IEntity[] =>
+  public get systems() {
+    return this._systems;
+  }
+
+  private getEntities = (components: TSystemComponents) =>
     collectEntities(components, this._entitiesMap);
 
   private set entitiesMap(value: TEntityComponentMap) {

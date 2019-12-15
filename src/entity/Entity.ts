@@ -1,7 +1,7 @@
-import { uuidv4 } from '../utils';
-import { IEntity } from './types';
-import { ComponentConstructor } from '../types';
-import { IWorld } from '../world/types';
+import { uuidv4 } from "../utils";
+import { IEntity } from "./types";
+import { ComponentConstructor } from "../types";
+import { IWorld } from "../world/types";
 
 export default class Entity implements IEntity {
   private readonly _id: string;
@@ -18,7 +18,7 @@ export default class Entity implements IEntity {
 
   public addComponent = <T extends ComponentConstructor<object>>(
     Component: T,
-    initialValues: ConstructorParameters<T>
+    initialValues?: ConstructorParameters<T>
   ): IEntity => {
     this._world.addEntityComponent(this, Component, initialValues);
 

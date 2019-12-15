@@ -1,12 +1,12 @@
-import { IEntity } from '../entity/types';
-import { TSystemComponents } from '../types';
-import { ISystem } from './types';
+import { IEntity } from "../entity/types";
+import { TSystemComponents } from "../types";
+import { ISystem } from "./types";
 
 export default abstract class System<
   T extends TSystemComponents,
   TDependencies extends object = any
 > implements ISystem<T, TDependencies> {
-  private _components: T = ([] as unknown) as T;
+  protected _components: T = ([] as unknown) as T;
 
   public get components() {
     return this._components;
@@ -18,9 +18,6 @@ export default abstract class System<
     return this;
   };
 
-  /**
-   * Override this function with actual System behavior for entities containing system components.
-   */
   public async init(_dependencies: TDependencies) {
     // Optionally override in deriving class
   }

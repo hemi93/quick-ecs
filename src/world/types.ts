@@ -7,19 +7,18 @@ export type TEntityComponentMap = Map<IEntity, Map<string, object>>;
 /**
  * ECS World.
  */
-export interface IExposedWorld {
+export interface IExposedWorld<TDependencies extends object> {
   /**
    * Add system to World.
-   * @param SystemConstructor Constructor of the system.
+   * @param SystemConstructor Constructor of the System.
    * @param initialValues Array of optional initial values that will be passed to System constructor.
    */
   addSystem<
     U extends TSystemComponents,
-    T extends ComponentConstructor<ISystem<U, any>>
+    T extends ComponentConstructor<ISystem<U, TDependencies>>
   >(
-    SystemConstructor: T,
-    initialValues?: ConstructorParameters<T>
-  ): IWorld;
+    SystemConstructor: T
+  ): IWorld<TDependencies>;
   /**
    * Create empty Entity.
    */
@@ -37,7 +36,12 @@ export interface IExposedWorld {
 /**
  * "Friendly" ECS World, exposes methods that are needed for other classes inside quick-ecs.
  */
-export interface IWorld extends IExposedWorld {
+export interface IWorld<TDependencies extends object = object>
+  extends IExposedWorld<TDependencies> {
+  /**
+   * Mostly exposed for tests.
+   */
+  readonly systems: ISystem[];
   /**
    * Create instance of Component and add it to Entity.
    * This doesn't modify Entity, but creates link in World between entity and created component instance.
