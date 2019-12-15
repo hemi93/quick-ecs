@@ -1,8 +1,8 @@
 # Quick ECS
 
-![License: MIT](https://img.shields.io/npm/l/quick-ecs?style=flat)
-![npm bundle size](https://img.shields.io/bundlephobia/minzip/quick-ecs?style=flat)
-![npm](https://img.shields.io/npm/v/quick-ecs?style=flat)
+[![License: MIT](https://img.shields.io/npm/l/quick-ecs?style=flat)](https://opensource.org/licenses/MIT)
+[![npm bundle size](https://img.shields.io/bundlephobia/minzip/quick-ecs?style=flat)](https://www.npmjs.com/package/quick-ecs)
+[![npm](https://img.shields.io/npm/v/quick-ecs?style=flat)](https://www.npmjs.com/package/quick-ecs)
 [![Maintainability](https://api.codeclimate.com/v1/badges/92c6671bbb5283ee1c3c/maintainability)](https://codeclimate.com/github/hemi93/quick-ecs/maintainability)
 
 Bring ECS architecture to JS project in quick, simple and powerful manner.
