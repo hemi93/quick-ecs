@@ -1,6 +1,9 @@
 import World from "./world/World";
 import { IExposedWorld } from "./world/types";
 
+/**
+ * Credit: https://stackoverflow.com/a/2117523/12540551
+ */
 export const uuidv4 = () =>
   "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
     const r = (Math.random() * 16) | 0;
