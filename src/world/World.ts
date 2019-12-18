@@ -1,7 +1,7 @@
 import Entity from "../entity/Entity";
 import { IEntity } from "../entity/types";
 import { ISystem } from "../system/types";
-import { ComponentConstructor, TSystemComponents } from "../types";
+import { IComponentConstructor, TComponentConstructors } from "../types";
 import { IWorld, TEntityComponentMap } from "./types";
 import { collectEntities, fallbackConstructorArgs } from "./utils";
 
@@ -9,7 +9,7 @@ export default class World<TDependencies extends object>
   implements IWorld<TDependencies> {
   private _entitiesMap: TEntityComponentMap;
   private readonly _dependencies: TDependencies;
-  private readonly _systems: ISystem[] = [];
+  private readonly _systems: ISystem<any, TDependencies>[] = [];
 
   constructor(dependencies: TDependencies) {
     this._dependencies = dependencies;
@@ -17,8 +17,8 @@ export default class World<TDependencies extends object>
   }
 
   public addSystem = <
-    U extends TSystemComponents,
-    T extends ComponentConstructor<ISystem<U, TDependencies>>
+    U extends object[],
+    T extends IComponentConstructor<ISystem<U, TDependencies>>
   >(
     Constructor: T
   ): IWorld<TDependencies> => {
@@ -29,7 +29,7 @@ export default class World<TDependencies extends object>
     return this;
   };
 
-  public createEntity = (): IEntity => {
+  public createEntity = <T extends object[]>(): IEntity<T> => {
     const entity = new Entity(this);
     this.entitiesMap = new Map(this._entitiesMap).set(entity, new Map());
 
@@ -38,9 +38,9 @@ export default class World<TDependencies extends object>
 
   public addEntityComponent = <
     U extends object,
-    T extends ComponentConstructor<U>
+    T extends IComponentConstructor<U>
   >(
-    entity: IEntity,
+    entity: IEntity<any>,
     Constructor: T,
     initialValues: ConstructorParameters<T>
   ): void => {
@@ -71,15 +71,16 @@ export default class World<TDependencies extends object>
     }
   };
 
-  public getEntityComponents = (entity: IEntity) =>
+  public getEntityComponents = (entity: IEntity<any>) =>
     this._entitiesMap.get(entity);
 
   public get systems() {
     return this._systems;
   }
 
-  private getEntities = (components: TSystemComponents) =>
-    collectEntities(components, this._entitiesMap);
+  private getEntities = <T extends object[]>(
+    components: TComponentConstructors<T>
+  ) => collectEntities(components, this._entitiesMap);
 
   private set entitiesMap(value: TEntityComponentMap) {
     this._entitiesMap = value;

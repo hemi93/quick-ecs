@@ -1,12 +1,7 @@
-import { System, IEntity } from "..";
-
-/* eslint-disable @typescript-eslint/no-empty-function */
-
-export default class FakeComponentWithArgs extends System<any, any> {
+export default class FakeComponentWithArgs {
   private _args: any;
 
   constructor(args: number) {
-    super();
     this._args = args;
   }
 
@@ -14,5 +9,6 @@ export default class FakeComponentWithArgs extends System<any, any> {
     return this._args;
   }
 
-  public update(_entity: IEntity, _dependencies: any): void {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  public update(): void {}
 }

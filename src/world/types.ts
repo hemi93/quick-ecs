@@ -1,8 +1,8 @@
 import { IEntity } from "../entity/types";
 import { ISystem } from "../system/types";
-import { ComponentConstructor, TSystemComponents } from "../types";
+import { IComponentConstructor, ElementType } from "../types";
 
-export type TEntityComponentMap = Map<IEntity, Map<string, object>>;
+export type TEntityComponentMap = Map<IEntity<object[]>, Map<string, object>>;
 
 /**
  * ECS World.
@@ -14,15 +14,15 @@ export interface IExposedWorld<TDependencies extends object> {
    * @param initialValues Array of optional initial values that will be passed to System constructor.
    */
   addSystem<
-    U extends TSystemComponents,
-    T extends ComponentConstructor<ISystem<U, TDependencies>>
+    U extends object[],
+    T extends IComponentConstructor<ISystem<U, TDependencies>>
   >(
     SystemConstructor: T
   ): IWorld<TDependencies>;
   /**
    * Create empty Entity.
    */
-  createEntity(): IEntity;
+  createEntity<T extends object[]>(): IEntity<T>;
   /**
    * Update all systems.
    */
@@ -41,7 +41,7 @@ export interface IWorld<TDependencies extends object = object>
   /**
    * Mostly exposed for tests.
    */
-  readonly systems: ISystem[];
+  readonly systems: ISystem<any, TDependencies>[];
   /**
    * Create instance of Component and add it to Entity.
    * This doesn't modify Entity, but creates link in World between entity and created component instance.
@@ -50,15 +50,20 @@ export interface IWorld<TDependencies extends object = object>
    * @param Component Component constructor.
    * @param initialValues Optional array of initial constructor arguments.
    */
-  addEntityComponent<U extends object, T extends ComponentConstructor<U>>(
-    entity: IEntity,
-    Component: T,
-    initialValues?: ConstructorParameters<T>
+  addEntityComponent<
+    TComponents extends object[],
+    U extends ElementType<TComponents>
+  >(
+    entity: IEntity<TComponents>,
+    Component: IComponentConstructor<U>,
+    initialValues?: ConstructorParameters<IComponentConstructor<U>>
   ): void;
   /**
    * Get map of Component name -> Component instance linked to given Entity.
    *
    * @param entity Entity instance.
    */
-  getEntityComponents(entity: IEntity): Map<string, object> | undefined;
+  getEntityComponents<T extends object[]>(
+    entity: IEntity<T>
+  ): Map<string, object> | undefined;
 }

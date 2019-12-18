@@ -1,9 +1,10 @@
 import { uuidv4 } from "../utils";
 import { IEntity } from "./types";
-import { ComponentConstructor } from "../types";
+import { IComponentConstructor, ElementType } from "../types";
 import { IWorld } from "../world/types";
 
-export default class Entity implements IEntity {
+export default class Entity<TComponents extends object[]>
+  implements IEntity<TComponents> {
   private readonly _id: string;
   private readonly _world: IWorld;
 
@@ -16,39 +17,43 @@ export default class Entity implements IEntity {
     return this._id;
   }
 
-  public addComponent = <T extends ComponentConstructor<object>>(
-    Component: T,
-    initialValues?: ConstructorParameters<T>
-  ): IEntity => {
-    this._world.addEntityComponent(this, Component, initialValues);
+  public addComponent = <U extends ElementType<TComponents>>(
+    Component: IComponentConstructor<U>,
+    initialValues?: ConstructorParameters<IComponentConstructor<U>>
+  ): IEntity<TComponents> => {
+    this._world.addEntityComponent<TComponents, U>(
+      this,
+      Component,
+      initialValues
+    );
 
     return this;
   };
 
-  public getComponent = <T extends object>(
-    Component: ComponentConstructor<T>
-  ): T => {
+  public getComponent = <U extends ElementType<TComponents>>(
+    Component: IComponentConstructor<U>
+  ): U => {
     const entityComponents = this._world.getEntityComponents(this);
 
     if (!entityComponents) {
       throw new Error(`Entity ${this.id} is not initialized in World!`);
     }
 
-    const component = entityComponents.get(Component.name);
+    const componentInstance = entityComponents.get(Component.name);
 
-    if (!component) {
+    if (!componentInstance) {
       throw new Error(
         `Entity ${this.id} is missing component "${Component.name}"!`
       );
     }
 
-    return component as T;
+    return componentInstance as U;
   };
 
   public debug = () => {
     console.debug({
       id: this.id,
-      components: this._world.getEntityComponents(this)
+      components: this._world.getEntityComponents<TComponents>(this)
     });
   };
 }

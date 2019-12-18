@@ -1,18 +1,20 @@
 import { IEntity } from "../entity/types";
-import { TSystemComponents } from "../types";
+import { TComponentConstructors } from "../types";
 import { ISystem } from "./types";
 
 export default abstract class System<
-  T extends TSystemComponents,
+  T extends object[],
   TDependencies extends object = any
 > implements ISystem<T, TDependencies> {
-  protected _components: T = ([] as unknown) as T;
+  protected _components: TComponentConstructors<
+    T
+  > = ([] as unknown) as TComponentConstructors<T>;
 
   public get components() {
     return this._components;
   }
 
-  public setComponents = (...components: T) => {
+  public setComponents = (...components: TComponentConstructors<T>) => {
     this._components = components;
 
     return this;
@@ -29,5 +31,5 @@ export default abstract class System<
   /**
    * Override this function with actual behavior for entities containing System Components.
    */
-  public abstract update(entity: IEntity, dependencies: TDependencies): void;
+  public abstract update(entity: IEntity<T>, dependencies: TDependencies): void;
 }

@@ -2,7 +2,7 @@ import memoize from "memoizee";
 
 import { IEntity } from "../entity/types";
 import { ISystem } from "../system/types";
-import { ComponentConstructor, TSystemComponents } from "../types";
+import { IComponentConstructor, TComponentConstructors } from "../types";
 import { TEntityComponentMap } from "./types";
 
 /**
@@ -28,10 +28,10 @@ const isMatch = (
  * @param entitiesMap Current World entities map, containing components by entities.
  */
 const findEntitiesWithComponents = (
-  components: TSystemComponents,
+  components: TComponentConstructors<any>,
   entitiesMap: TEntityComponentMap
-): IEntity[] => {
-  const entities: IEntity[] = [];
+): IEntity<any>[] => {
+  const entities: IEntity<any>[] = [];
   const componentNames = new Set(
     Array.from(components.values()).map(v => v.name)
   );
@@ -56,8 +56,8 @@ export const collectEntities = memoize(findEntitiesWithComponents);
  * Use this to fall back to empty array of constructor arguments when none are needed and provided.
  */
 export const fallbackConstructorArgs = <
-  U extends TSystemComponents,
-  T extends ComponentConstructor<ISystem<U, any>>
+  U extends object[],
+  T extends IComponentConstructor<ISystem<U, any>>
 >(
   initialValues?: ConstructorParameters<T>
 ) => initialValues || ([] as any[]);
