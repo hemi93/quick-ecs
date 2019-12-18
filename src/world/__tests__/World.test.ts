@@ -1,6 +1,8 @@
 import FakeComponentWithArgs from "../../__fakes__/FakeComponentWithArgs.fake";
 import FakeComponentWithNoArgs from "../../__fakes__/FakeComponentWithNoArgs.fake";
-import FakeSystemWithNoArgs from "../../__fakes__/FakeSystemWithNoArgs.fake";
+import FakeSystem, {
+  TFakeSystemWithNoArgsComponents
+} from "../../__fakes__/FakeSystem";
 import Entity from "../../entity/Entity";
 import { IEntity } from "../../entity/types";
 import { ISystem } from "../../system/types";
@@ -8,7 +10,7 @@ import { IWorld } from "../types";
 import World from "../World";
 
 describe("World", () => {
-  let deps = {
+  const deps = {
     test: "a"
   };
 
@@ -21,10 +23,10 @@ describe("World", () => {
   });
 
   describe("addSystem", () => {
-    let system: ISystem;
+    let system: ISystem<TFakeSystemWithNoArgsComponents>;
 
     beforeEach(() => {
-      world.addSystem(FakeSystemWithNoArgs);
+      world.addSystem(FakeSystem);
       system = world.systems[0];
     });
 
@@ -32,7 +34,7 @@ describe("World", () => {
   });
 
   describe("createEntity", () => {
-    let entity: IEntity;
+    let entity: IEntity<TFakeSystemWithNoArgsComponents>;
 
     beforeEach(() => {
       entity = world.createEntity();
@@ -46,7 +48,7 @@ describe("World", () => {
   });
 
   describe("addEntityComponent", () => {
-    let entity: IEntity;
+    let entity: IEntity<TFakeSystemWithNoArgsComponents>;
 
     beforeEach(() => {
       entity = world.createEntity();
@@ -81,7 +83,7 @@ describe("World", () => {
     let systemInitSpy: jest.SpyInstance;
 
     beforeEach(async () => {
-      world.addSystem(FakeSystemWithNoArgs);
+      world.addSystem(FakeSystem);
       systemInitSpy = jest.spyOn(world.systems[0], "init");
 
       await world.init();
@@ -94,11 +96,14 @@ describe("World", () => {
   describe("update", () => {
     let systemUpdateSpy: jest.SpyInstance;
     let systemPreUpdateSpy: jest.SpyInstance;
-    let entity: IEntity;
+    let entity: IEntity<TFakeSystemWithNoArgsComponents>;
 
     beforeEach(async () => {
-      world.addSystem(FakeSystemWithNoArgs);
-      entity = world.createEntity().addComponent(FakeComponentWithNoArgs);
+      world.addSystem(FakeSystem);
+      entity = world
+        .createEntity<TFakeSystemWithNoArgsComponents>()
+        .addComponent(FakeComponentWithNoArgs)
+        .addComponent(FakeComponentWithArgs);
       systemUpdateSpy = jest.spyOn(world.systems[0], "update");
       systemPreUpdateSpy = jest.spyOn(world.systems[0], "preUpdate");
       await world.init();

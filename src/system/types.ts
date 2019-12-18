@@ -1,20 +1,20 @@
 import { IEntity } from "../entity/types";
-import { ComponentConstructor, TSystemComponents } from "../types";
+import { IComponentConstructor, TComponentConstructors } from "../types";
 
 export interface ISystem<
-  T extends TSystemComponents = any,
+  T extends object[],
   TSystemDependencies = Record<string, any>
 > {
   /**
    * Array of System Component constructors used to fetch System Entities from World.
    */
-  readonly components: T;
+  readonly components: TComponentConstructors<T>;
   /**
    * Set components for System.
    *
    * **IMPORTANT** Remember to call this in System's constructor!
    */
-  setComponents(...components: ComponentConstructor<any>[]): void;
+  setComponents(...components: IComponentConstructor<any>[]): void;
   /**
    * Runs immediately before `update()` function for this system.
    *
@@ -35,7 +35,7 @@ export interface ISystem<
    * @param entity Instance of the entity to update.
    * @param dependencies Dependencies passed to World on its creation.
    */
-  update(entity: IEntity, dependencies: TSystemDependencies): void;
+  update(entity: IEntity<T>, dependencies: TSystemDependencies): void;
   /**
    * Asynchronously set up this System.
    *

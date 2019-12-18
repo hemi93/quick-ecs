@@ -1,15 +1,17 @@
-import { ComponentConstructor } from "../types";
+import { IComponentConstructor, ElementType } from "../types";
 
-export interface IEntity {
+export interface IEntity<TComponents extends object[]> {
   /**
    * Entity instance id. Should be used internally only.
    */
   readonly id: string;
-  addComponent<T extends ComponentConstructor<object>>(
-    Component: T,
-    initialValues?: ConstructorParameters<T>
-  ): IEntity;
-  getComponent<T extends object>(Component: ComponentConstructor<T>): T;
+  addComponent<U extends ElementType<TComponents>>(
+    Component: IComponentConstructor<U>,
+    initialValues?: ConstructorParameters<IComponentConstructor<U>>
+  ): IEntity<TComponents>;
+  getComponent<U extends ElementType<TComponents>>(
+    Component: IComponentConstructor<U>
+  ): U;
   /**
    * Use console.debug method to print basic information about this Entity.
    *

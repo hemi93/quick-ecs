@@ -12,10 +12,11 @@ Currenly in early stages of development, but already delivering basic toolset. C
 
 - Injecting Dependencies into your Systems
 - Lifecycle methods for Systems (init, preUpdate, update) that allow for easy setup
-- You can define any combination of Components for System at startup
+- You can define any combination of Components for System
 - Minimal amount of package dependencies (which is planned to be reduced to 0)
-- Tiny, less than 8 kB packed!
+- Lightweight and simple
 - Supports method chaining for convenient entity manipulation
+- Provides TS typings for easier and safer development
 
 ## Installation
 
@@ -64,8 +65,10 @@ class ExampleComponent {
 
 // Define example System
 
+type TExampleSystemComponents = [ExampleComponent]
+
 export default class ExampleSystem extends System<
-  [ComponentConstructor<ExampleComponent>],
+  TExampleSystemComponents,
   IExampleDependencies
 > {
   constructor() {
@@ -74,7 +77,7 @@ export default class ExampleSystem extends System<
     this.setComponents(ExampleComponent);
   }
 
-  public update(entity: IEntity, { timer }: IExampleDependencies) {
+  public update(entity: IEntity<TExampleSystemComponents>, { timer }: IExampleDependencies) {
     const { prop, updateProp } = entity.getComponent(ExampleComponent);
 
     updateProp(prop * timer.getDeltaTime());
@@ -99,7 +102,7 @@ export const main = async ({timer, runRenderLoop}: IExampleEngine) => {
    * Create Entity and add Component to it.
    * Second argument of addComponent accepts array of constructor params, type safe!
    */
-  const entity = world.createEntity();
+  const entity = world.createEntity<TExampleSystemComponents>();
   entity.addComponent(ExampleComponent, [0]);
 
   // Initialize the World. This runs all init functions in added Systems.
@@ -109,8 +112,6 @@ export const main = async ({timer, runRenderLoop}: IExampleEngine) => {
    * Following step runs the World and depends on engine you're using.
    * This is generic - you just need to run update in render loop.
    */
-  runRenderLoop(() => {
-    world.update();
-  })
+  runRenderLoop(() => world.update())
 };
 ```

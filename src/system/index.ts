@@ -2,4 +2,4 @@ import System from "./System";
 
 export { System };
 
-export type ISystem = import("./types").ISystem;
+export type ISystem<T extends object[]> = import("./types").ISystem<T>;
