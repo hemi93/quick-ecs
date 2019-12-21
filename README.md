@@ -28,7 +28,7 @@ yarn add quick-ecs
 Following code samples are written in TypeScript, but pure JS can be used as well.
 
 ```typescript
-import { ComponentConstructor, IEntity, System } from "quick-ecs";
+import { IEntity, System, World } from "quick-ecs";
 
 // Define System dependencies (optional)
 
