@@ -84,6 +84,5 @@ export default class World<TDependencies extends object>
 
   private set entitiesMap(value: TEntityComponentMap) {
     this._entitiesMap = value;
-    collectEntities.clear();
   }
 }

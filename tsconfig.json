@@ -16,6 +16,6 @@
     "removeComments": true,
     "isolatedModules": true
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["src/**/*.test.ts", "src/**/*/*.fake.ts"]
+  "include": ["src/**/*.ts", "!**/__fakes__/*"],
+  "exclude": ["src/**/*.test.ts"]
 }
