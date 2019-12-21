@@ -13,8 +13,7 @@ Currenly in early stages of development, but already delivering basic toolset. C
 - Injecting Dependencies into your Systems
 - Lifecycle methods for Systems (init, preUpdate, update) that allow for easy setup
 - You can define any combination of Components for System
-- Minimal amount of package dependencies (which is planned to be reduced to 0)
-- Lightweight and simple
+- Lightweight, simple and with no runtime dependencies
 - Supports method chaining for convenient entity manipulation
 - Provides TS typings for easier and safer development
 
@@ -63,7 +62,9 @@ class ExampleComponent {
   };
 }
 
-// Define example System
+/**
+ * Define example System.
+ */
 
 type TExampleSystemComponents = [ExampleComponent]
 
@@ -73,10 +74,19 @@ export default class ExampleSystem extends System<
 > {
   constructor() {
     super();
-    // Remember to set component types for the system to use. This is also type-safe.
+    /**
+     * Set component types for the system to use.
+     * 
+     * This is type-safe - only component types specified for this system are allowed. 
+     */
     this.setComponents(ExampleComponent);
   }
 
+  /**
+   * Define your update function which will perform logic on Entities matching specified Components.
+   * 
+   * This function is ran for each matching Entity.
+   */
   public update(entity: IEntity<TExampleSystemComponents>, { timer }: IExampleDependencies) {
     const { prop, updateProp } = entity.getComponent(ExampleComponent);
 
@@ -94,7 +104,7 @@ interface IExampleEngine {
 }
 
 export const main = async ({timer, runRenderLoop}: IExampleEngine) => {
-  // Create World and add system
+  // Create World and add ExampleSystem to it
   const world = new World<IExampleDependencies>({ timer });
   world.addSystem(ExampleSystem);
 

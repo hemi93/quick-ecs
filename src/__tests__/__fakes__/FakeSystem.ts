@@ -1,5 +1,5 @@
-import { IEntity } from "../entity/types";
-import { System } from "../system";
+import { IEntity } from "../../entity/types";
+import { System } from "../../system";
 import FakeComponentWithArgs from "./FakeComponentWithArgs.fake";
 import FakeComponentWithNoArgs from "./FakeComponentWithNoArgs.fake";
 
@@ -13,7 +13,7 @@ export type TFakeSystemWithNoArgsComponents = [
 export default class FakeSystem extends System<
   TFakeSystemWithNoArgsComponents,
   any
-> {
+  > {
   constructor() {
     super();
     this.setComponents(FakeComponentWithArgs);
@@ -22,9 +22,9 @@ export default class FakeSystem extends System<
   public update(
     _entity: IEntity<TFakeSystemWithNoArgsComponents>,
     _dependencies: any
-  ): void {}
+  ): void { }
 
-  public async init() {}
+  public async init() { }
 
-  public preUpdate() {}
+  public preUpdate() { }
 }

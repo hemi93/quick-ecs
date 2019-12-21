@@ -1,8 +1,8 @@
-import FakeComponentWithArgs from "../../__fakes__/FakeComponentWithArgs.fake";
-import FakeComponentWithNoArgs from "../../__fakes__/FakeComponentWithNoArgs.fake";
+import FakeComponentWithArgs from "../../__tests__/__fakes__/FakeComponentWithArgs.fake";
+import FakeComponentWithNoArgs from "../../__tests__/__fakes__/FakeComponentWithNoArgs.fake";
 import FakeSystem, {
   TFakeSystemWithNoArgsComponents
-} from "../../__fakes__/FakeSystem";
+} from "../../__tests__/__fakes__/FakeSystem";
 import Entity from "../../entity/Entity";
 import { IEntity } from "../../entity/types";
 import { ISystem } from "../../system/types";
