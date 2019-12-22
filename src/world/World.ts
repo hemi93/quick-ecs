@@ -56,7 +56,9 @@ export default class World<TDependencies extends object>
   };
 
   public init = async () => {
-    await Promise.all([this._systems.map(x => x.init(this._dependencies))])
+    for (const system of this._systems) {
+      await system.init(this._dependencies);
+    }
   }
 
   public update = () => {

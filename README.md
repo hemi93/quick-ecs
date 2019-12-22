@@ -5,17 +5,17 @@
 [![npm](https://img.shields.io/npm/v/quick-ecs?style=flat)](https://www.npmjs.com/package/quick-ecs)
 [![Maintainability](https://api.codeclimate.com/v1/badges/92c6671bbb5283ee1c3c/maintainability)](https://codeclimate.com/github/hemi93/quick-ecs/maintainability)
 
-Bring ECS architecture to JS project in quick, simple and powerful manner.
-Currenly in early stages of development, but already delivering basic toolset. Contributors are welcome!
+Bring Entity-Component-System architecture to your project in quick, simple and powerful manner.
 
 ## Features
 
-- Injecting Dependencies into your Systems
-- Lifecycle methods for Systems (init, preUpdate, update) that allow for easy setup
-- You can define any combination of Components for System
+- Fully generic - should integrate nicely with any engine
+- Accessing global Dependencies in Systems with built-in DI
+- Lifecycle methods for Systems (init, preUpdate, update) allowing for easy setup
+- Defining any combination of Components for System
 - Lightweight, simple and with no runtime dependencies
-- Supports method chaining for convenient entity manipulation
-- Provides TS typings for easier and safer development
+- Method chaining for convenient Entity manipulation
+- Full TypeScript support
 
 ## Installation
 
@@ -30,7 +30,15 @@ Following code samples are written in TypeScript, but pure JS can be used as wel
 ```typescript
 import { IEntity, System, World } from "quick-ecs";
 
-// Define System dependencies (optional)
+/**
+ * Optionally define dependencies to be injected into Systems.
+ * They will be accessible at runtime.
+ * 
+ * Some usage examples include:
+ * - Accessing information about current frame (delta time)
+ * - Sharing information between Systems
+ * - Getting information from your engine to improve performance (such as current camera frustrum)
+ */
 
 interface IExampleDependencies {
   timer: {
@@ -64,8 +72,13 @@ class ExampleComponent {
 
 /**
  * Define example System.
+ * 
+ * Systems are intended to have single responsibility - they target single group of entities.
  */
 
+/**
+ * Define type for components that this system will handle.
+ */
 type TExampleSystemComponents = [ExampleComponent]
 
 export default class ExampleSystem extends System<
@@ -120,7 +133,7 @@ export const main = async ({timer, runRenderLoop}: IExampleEngine) => {
 
   /**
    * Following step runs the World and depends on engine you're using.
-   * This is generic - you just need to run update in render loop.
+   * This is fully generic - you just need to run update in render loop!
    */
   runRenderLoop(() => world.update())
 };

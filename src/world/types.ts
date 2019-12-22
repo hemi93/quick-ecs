@@ -7,7 +7,7 @@ export type TEntityComponentMap = ReadonlyMap<IEntity<object[]>, ReadonlyMap<str
 /**
  * ECS World.
  * 
- * This interface is exposed to modules using quick-ecs from outside.
+ * This interface is exposed to outside modules using `quick-ecs`.
  */
 export interface IExposedWorld<TDependencies extends object> {
   /**
@@ -30,9 +30,12 @@ export interface IExposedWorld<TDependencies extends object> {
    */
   update(): void;
   /**
-   * Asynchronously initialize all World's Systems.
+   * Asynchronously initialize all added Systems at the same time.
    */
   init(): Promise<void>;
+  /**
+   * Remove Entity from World.
+   */
   removeEntity(entity: IEntity<any>): void;
 }
 
@@ -44,7 +47,7 @@ export interface IExposedWorld<TDependencies extends object> {
 export interface IWorld<TDependencies extends object = object>
   extends IExposedWorld<TDependencies> {
   /**
-   * Mostly exposed for tests.
+   * **Exposed only for tests!**
    */
   readonly systems: ISystem<any, TDependencies>[];
   /**
@@ -64,7 +67,7 @@ export interface IWorld<TDependencies extends object = object>
     initialValues?: ConstructorParameters<IComponentConstructor<U>>
   ): void;
   /**
-   * Get map of Component name -> Component instance linked to given Entity.
+   * Get map of Component `name -> instance` linked to given Entity.
    *
    * @param entity Entity instance.
    */
