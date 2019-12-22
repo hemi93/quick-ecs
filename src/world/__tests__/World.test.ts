@@ -116,4 +116,17 @@ describe("World", () => {
     it("runs update with matching entity and deps", () =>
       expect(systemUpdateSpy).toHaveBeenCalledWith(entity, deps));
   });
+
+  describe("removeEntity", () => {
+    let entity: IEntity<TFakeSystemWithNoArgsComponents>;
+
+    beforeEach(() => {
+      entity = world.createEntity();
+      world.removeEntity(entity);
+    });
+
+    it("getEntityComponents returns undefined for removed entity", () => {
+      expect(world.getEntityComponents(entity)).toEqual(undefined);
+    });
+  })
 });

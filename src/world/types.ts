@@ -2,10 +2,12 @@ import { IEntity } from "../entity/types";
 import { ISystem } from "../system/types";
 import { IComponentConstructor, ElementType } from "../types";
 
-export type TEntityComponentMap = Map<IEntity<object[]>, Map<string, object>>;
+export type TEntityComponentMap = ReadonlyMap<IEntity<object[]>, ReadonlyMap<string, object>>;
 
 /**
  * ECS World.
+ * 
+ * This interface is exposed to modules using quick-ecs from outside.
  */
 export interface IExposedWorld<TDependencies extends object> {
   /**
@@ -31,10 +33,13 @@ export interface IExposedWorld<TDependencies extends object> {
    * Asynchronously initialize all World's Systems.
    */
   init(): Promise<void>;
+  removeEntity(entity: IEntity<any>): void;
 }
 
 /**
- * "Friendly" ECS World, exposes methods that are needed for other classes inside quick-ecs.
+ * *Friendly* ECS World
+ * 
+ * Exposes methods that are needed for other classes **inside** quick-ecs.
  */
 export interface IWorld<TDependencies extends object = object>
   extends IExposedWorld<TDependencies> {
@@ -65,5 +70,5 @@ export interface IWorld<TDependencies extends object = object>
    */
   getEntityComponents<T extends object[]>(
     entity: IEntity<T>
-  ): Map<string, object> | undefined;
+  ): ReadonlyMap<string, object> | undefined;
 }

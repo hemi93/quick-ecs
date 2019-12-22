@@ -56,10 +56,8 @@ export default class World<TDependencies extends object>
   };
 
   public init = async () => {
-    for (const system of this._systems) {
-      await system.init(this._dependencies);
-    }
-  };
+    await Promise.all([this._systems.map(x => x.init(this._dependencies))])
+  }
 
   public update = () => {
     for (const system of this._systems) {
@@ -70,6 +68,12 @@ export default class World<TDependencies extends object>
       }
     }
   };
+
+  public removeEntity = (entity: IEntity<any>) => {
+    const newEntitiesMap = new Map(this._entitiesMap)
+    newEntitiesMap.delete(entity)
+    this._entitiesMap = newEntitiesMap
+  }
 
   public getEntityComponents = (entity: IEntity<any>) =>
     this._entitiesMap.get(entity);
