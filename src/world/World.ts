@@ -27,14 +27,14 @@ export default class World<TDependencies extends object>
     this._systems.push(instance);
 
     return this;
-  };
+  }
 
   public createEntity = <T extends object[]>(): IEntity<T> => {
     const entity = new Entity(this);
     this.entitiesMap = new Map(this._entitiesMap).set(entity, new Map());
 
     return entity;
-  };
+  }
 
   public addEntityComponent = <
     U extends object,
@@ -53,7 +53,7 @@ export default class World<TDependencies extends object>
         instance
       )
     );
-  };
+  }
 
   public init = async () => {
     for (const system of this._systems) {
@@ -69,7 +69,7 @@ export default class World<TDependencies extends object>
         system.update(entity, this._dependencies);
       }
     }
-  };
+  }
 
   public removeEntity = (entity: IEntity<any>) => {
     const newEntitiesMap = new Map(this._entitiesMap)
