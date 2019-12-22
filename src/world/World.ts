@@ -84,6 +84,10 @@ export default class World<TDependencies extends object>
     return this._systems;
   }
 
+  public getEntitiesMap() {
+    return this._entitiesMap;
+  }
+
   private getEntities = <T extends object[]>(
     components: TComponentConstructors<T>
   ) => collectEntities(components, this._entitiesMap);

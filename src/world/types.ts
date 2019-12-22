@@ -50,6 +50,7 @@ export interface IWorld<TDependencies extends object = object>
    * **Exposed only for tests!**
    */
   readonly systems: ISystem<any, TDependencies>[];
+
   /**
    * Create instance of Component and add it to Entity.
    * This doesn't modify Entity, but creates link in World between entity and created component instance.
@@ -74,4 +75,8 @@ export interface IWorld<TDependencies extends object = object>
   getEntityComponents<T extends object[]>(
     entity: IEntity<T>
   ): ReadonlyMap<string, object> | undefined;
+  /**
+  * **Exposed only for tests!**
+  */
+  getEntitiesMap(): TEntityComponentMap;
 }
