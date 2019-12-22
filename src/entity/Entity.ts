@@ -33,23 +33,16 @@ export default class Entity<TComponents extends object[]>
   public getComponent = <U extends ElementType<TComponents>>(
     Component: IComponentConstructor<U>
   ): U => {
-    const entityComponents = this._world.getEntityComponents(this);
-
-    if (!entityComponents) {
-      throw new Error(`Entity ${this.id} is not initialized in World!`);
-    }
-
-    const componentInstance = entityComponents.get(Component.name);
+    const componentInstance = this._world.getEntityComponents(this)?.get(Component.name);
 
     if (!componentInstance) {
-      throw new Error(
-        `Entity ${this.id} is missing component "${Component.name}"!`
-      );
+      throw new Error(`Entity "${this.id}" does not have "${Component.name}"!`);
     }
 
     return componentInstance as U;
   };
 
+  /* istanbul ignore next */
   public debug = () => {
     console.debug({
       id: this.id,

@@ -2,10 +2,12 @@ import { IEntity } from "../entity/types";
 import { ISystem } from "../system/types";
 import { IComponentConstructor, ElementType } from "../types";
 
-export type TEntityComponentMap = Map<IEntity<object[]>, Map<string, object>>;
+export type TEntityComponentMap = ReadonlyMap<IEntity<object[]>, ReadonlyMap<string, object>>;
 
 /**
  * ECS World.
+ * 
+ * This interface is exposed to outside modules using `quick-ecs`.
  */
 export interface IExposedWorld<TDependencies extends object> {
   /**
@@ -28,20 +30,27 @@ export interface IExposedWorld<TDependencies extends object> {
    */
   update(): void;
   /**
-   * Asynchronously initialize all World's Systems.
+   * Asynchronously initialize all added Systems at the same time.
    */
   init(): Promise<void>;
+  /**
+   * Remove Entity from World.
+   */
+  removeEntity(entity: IEntity<any>): void;
 }
 
 /**
- * "Friendly" ECS World, exposes methods that are needed for other classes inside quick-ecs.
+ * *Friendly* ECS World
+ * 
+ * Exposes methods that are needed for other classes **inside** quick-ecs.
  */
 export interface IWorld<TDependencies extends object = object>
   extends IExposedWorld<TDependencies> {
   /**
-   * Mostly exposed for tests.
+   * **Exposed only for tests!**
    */
   readonly systems: ISystem<any, TDependencies>[];
+
   /**
    * Create instance of Component and add it to Entity.
    * This doesn't modify Entity, but creates link in World between entity and created component instance.
@@ -59,11 +68,15 @@ export interface IWorld<TDependencies extends object = object>
     initialValues?: ConstructorParameters<IComponentConstructor<U>>
   ): void;
   /**
-   * Get map of Component name -> Component instance linked to given Entity.
+   * Get map of Component `name -> instance` linked to given Entity.
    *
    * @param entity Entity instance.
    */
   getEntityComponents<T extends object[]>(
     entity: IEntity<T>
-  ): Map<string, object> | undefined;
+  ): ReadonlyMap<string, object> | undefined;
+  /**
+  * **Exposed only for tests!**
+  */
+  getEntitiesMap(): TEntityComponentMap;
 }
