@@ -42,6 +42,7 @@ export default class Entity<TComponents extends object[]>
     return componentInstance as U;
   };
 
+  /* istanbul ignore next */
   public debug = () => {
     console.debug({
       id: this.id,

@@ -5,7 +5,7 @@ import { ISystem } from "./types";
 export default abstract class System<
   T extends object[],
   TDependencies extends object = any
-> implements ISystem<T, TDependencies> {
+  > implements ISystem<T, TDependencies> {
   protected _components: TComponentConstructors<
     T
   > = ([] as unknown) as TComponentConstructors<T>;
@@ -20,10 +20,12 @@ export default abstract class System<
     return this;
   };
 
+  /* istanbul ignore next */
   public async init(_dependencies: TDependencies) {
     // Optionally override in deriving class
   }
 
+  /* istanbul ignore next */
   public preUpdate(_dependencies: TDependencies) {
     // Optionally override in deriving class
   }
