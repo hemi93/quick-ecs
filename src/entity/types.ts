@@ -1,4 +1,4 @@
-import { IComponentConstructor, ElementType } from "../types";
+import {ElementType,IComponentConstructor} from '../types'
 
 export interface IEntity<TComponents extends object[]> {
   /**

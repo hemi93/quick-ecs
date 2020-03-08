@@ -1,6 +1,6 @@
-import { IEntity } from "../entity/types";
-import { TComponentConstructors } from "../types";
-import { ISystem } from "./types";
+import {IEntity} from '../entity/types'
+import {TComponentConstructors} from '../types'
+import {ISystem} from './types'
 
 export default abstract class System<
   T extends object[],
@@ -11,13 +11,13 @@ export default abstract class System<
   > = ([] as unknown) as TComponentConstructors<T>;
 
   public get components() {
-    return this._components;
+    return this._components
   }
 
   public setComponents = (...components: TComponentConstructors<T>) => {
-    this._components = components;
+    this._components = components
 
-    return this;
+    return this
   };
 
   /* istanbul ignore next */

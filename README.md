@@ -33,7 +33,7 @@ import { IEntity, System, World } from "quick-ecs";
 /**
  * Optionally define dependencies to be injected into Systems.
  * They will be accessible at runtime.
- * 
+ *
  * Some usage examples include:
  * - Accessing information about current frame (delta time)
  * - Sharing information between Systems
@@ -72,7 +72,7 @@ class ExampleComponent {
 
 /**
  * Define example System.
- * 
+ *
  * Systems are intended to have single responsibility - they target single group of entities.
  */
 
@@ -89,15 +89,15 @@ export default class ExampleSystem extends System<
     super();
     /**
      * Set component types for the system to use.
-     * 
-     * This is type-safe - only component types specified for this system are allowed. 
+     *
+     * This is type-safe - only component types specified for this system are allowed.
      */
     this.setComponents(ExampleComponent);
   }
 
   /**
    * Define your update function which will perform logic on Entities matching specified Components.
-   * 
+   *
    * This function is ran for each matching Entity.
    */
   public update(entity: IEntity<TExampleSystemComponents>, { timer }: IExampleDependencies) {

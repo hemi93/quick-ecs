@@ -1,9 +1,9 @@
-import Entity from "../entity/Entity";
-import { IEntity } from "../entity/types";
-import { ISystem } from "../system/types";
-import { IComponentConstructor, TComponentConstructors } from "../types";
-import { IWorld, TEntityComponentMap } from "./types";
-import { collectEntities, fallbackConstructorArgs } from "./utils";
+import Entity from '../entity/Entity'
+import {IEntity} from '../entity/types'
+import {ISystem} from '../system/types'
+import {IComponentConstructor, TComponentConstructors} from '../types'
+import {IWorld, TEntityComponentMap} from './types'
+import {collectEntities, fallbackConstructorArgs} from './utils'
 
 export default class World<TDependencies extends object>
   implements IWorld<TDependencies> {
@@ -12,8 +12,8 @@ export default class World<TDependencies extends object>
   private readonly _systems: ISystem<any, TDependencies>[] = [];
 
   constructor(dependencies: TDependencies) {
-    this._dependencies = dependencies;
-    this._entitiesMap = new Map();
+    this._dependencies = dependencies
+    this._entitiesMap = new Map()
   }
 
   public addSystem = <
@@ -22,18 +22,18 @@ export default class World<TDependencies extends object>
   >(
     Constructor: T
   ): IWorld<TDependencies> => {
-    const instance = new Constructor();
+    const instance = new Constructor()
 
-    this._systems.push(instance);
+    this._systems.push(instance)
 
-    return this;
+    return this
   }
 
   public createEntity = <T extends object[]>(): IEntity<T> => {
-    const entity = new Entity(this);
-    this.entitiesMap = new Map(this._entitiesMap).set(entity, new Map());
+    const entity = new Entity(this)
+    this.entitiesMap = new Map(this._entitiesMap).set(entity, new Map())
 
-    return entity;
+    return entity
   }
 
   public addEntityComponent = <
@@ -44,7 +44,7 @@ export default class World<TDependencies extends object>
     Constructor: T,
     initialValues: ConstructorParameters<T>
   ): void => {
-    const instance = new Constructor(...fallbackConstructorArgs(initialValues));
+    const instance = new Constructor(...fallbackConstructorArgs(initialValues))
 
     this.entitiesMap = new Map(this._entitiesMap).set(
       entity,
@@ -52,21 +52,21 @@ export default class World<TDependencies extends object>
         Constructor.name,
         instance
       )
-    );
+    )
   }
 
   public init = async () => {
     for (const system of this._systems) {
-      await system.init(this._dependencies);
+      await system.init(this._dependencies)
     }
   }
 
   public update = () => {
     for (const system of this._systems) {
-      system.preUpdate(this._dependencies);
+      system.preUpdate(this._dependencies)
 
       for (const entity of this.getEntities(system.components)) {
-        system.update(entity, this._dependencies);
+        system.update(entity, this._dependencies)
       }
     }
   }
@@ -81,11 +81,11 @@ export default class World<TDependencies extends object>
     this._entitiesMap.get(entity);
 
   public get systems() {
-    return this._systems;
+    return this._systems
   }
 
   public getEntitiesMap() {
-    return this._entitiesMap;
+    return this._entitiesMap
   }
 
   private getEntities = <T extends object[]>(
@@ -93,6 +93,6 @@ export default class World<TDependencies extends object>
   ) => collectEntities(components, this._entitiesMap);
 
   private set entitiesMap(value: TEntityComponentMap) {
-    this._entitiesMap = value;
+    this._entitiesMap = value
   }
 }
