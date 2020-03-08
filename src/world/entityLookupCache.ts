@@ -1,10 +1,11 @@
-import { TComponentConstructors } from "types"
-import { TEntityComponentMap } from "./types"
-import { IEntity } from "entity/types"
+import {IEntity} from 'entity/types'
+import {TComponentConstructors} from 'types'
+
+import {TEntityComponentMap} from './types'
 
 /**
  * Creates entity lookup cache.
- * 
+ *
  * This is based on WeakMaps, so no manual cleaning is needed.
  */
 export const getEntityLookupCache = () => {

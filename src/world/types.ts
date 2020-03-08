@@ -1,12 +1,12 @@
-import { IEntity } from "../entity/types";
-import { ISystem } from "../system/types";
-import { IComponentConstructor, ElementType } from "../types";
+import {IEntity} from '../entity/types'
+import {ISystem} from '../system/types'
+import {ElementType,IComponentConstructor} from '../types'
 
 export type TEntityComponentMap = ReadonlyMap<IEntity<object[]>, ReadonlyMap<string, object>>;
 
 /**
  * ECS World.
- * 
+ *
  * This interface is exposed to outside modules using `quick-ecs`.
  */
 export interface IExposedWorld<TDependencies extends object> {
@@ -41,7 +41,7 @@ export interface IExposedWorld<TDependencies extends object> {
 
 /**
  * *Friendly* ECS World
- * 
+ *
  * Exposes methods that are needed for other classes **inside** quick-ecs.
  */
 export interface IWorld<TDependencies extends object = object>

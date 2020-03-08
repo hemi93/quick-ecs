@@ -1,5 +1,5 @@
-import { IEntity } from "../entity/types";
-import { IComponentConstructor, TComponentConstructors } from "../types";
+import {IEntity} from '../entity/types'
+import {IComponentConstructor, TComponentConstructors} from '../types'
 
 export interface ISystem<
   T extends object[],
