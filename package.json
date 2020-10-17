@@ -24,5 +24,13 @@
   },
   "files": [
     "build"
+  ],
+  "keywords": [
+    "ecs",
+    "entity-component-system",
+    "entity",
+    "gamedev",
+    "component",
+    "system"
   ]
 }
