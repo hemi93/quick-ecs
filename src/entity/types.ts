@@ -2,20 +2,28 @@ import {ElementType,IComponentConstructor} from '../types'
 
 export interface IEntity<TComponents extends object[]> {
   /**
-   * Entity instance id. Should be used internally only.
+   * Create and add Component to Entity.
    */
-  readonly id: string;
   addComponent<U extends ElementType<TComponents>>(
     Component: IComponentConstructor<U>,
     initialValues?: ConstructorParameters<IComponentConstructor<U>>
-  ): IEntity<TComponents>;
+  ): IEntity<TComponents>
+    /**
+   * Get Component instance assigned to Entity.
+   */
   getComponent<U extends ElementType<TComponents>>(
     Component: IComponentConstructor<U>
-  ): U;
+  ): U | undefined
+  /**
+   * Remove Component from Entity.
+   */
+  removeComponent<U extends ElementType<TComponents>>(
+    Component: IComponentConstructor<U>
+  ): IEntity<TComponents>
   /**
    * Use console.debug method to print basic information about this Entity.
    *
    * Make sure you have console.debug level enabled in browser to see the logs!
    */
-  debug(): void;
+  debug(): void
 }

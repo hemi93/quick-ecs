@@ -2,14 +2,14 @@ import Entity from '../entity/Entity'
 import {IEntity} from '../entity/types'
 import {ISystem} from '../system/types'
 import {IComponentConstructor, TComponentConstructors} from '../types'
-import {IWorld, TEntityComponentMap} from './types'
+import {IEcsWorld, TEntityComponentMap} from './types'
 import {collectEntities, fallbackConstructorArgs} from './utils'
 
 export default class World<TDependencies extends object>
-  implements IWorld<TDependencies> {
-  private _entitiesMap: TEntityComponentMap;
-  private readonly _dependencies: TDependencies;
-  private readonly _systems: ISystem<any, TDependencies>[] = [];
+  implements IEcsWorld<TDependencies> {
+  private _entitiesMap: TEntityComponentMap
+  private readonly _dependencies: TDependencies
+  private readonly _systems: ISystem<any, TDependencies>[] = []
 
   constructor(dependencies: TDependencies) {
     this._dependencies = dependencies
@@ -21,17 +21,15 @@ export default class World<TDependencies extends object>
     T extends IComponentConstructor<ISystem<U, TDependencies>>
   >(
     Constructor: T
-  ): IWorld<TDependencies> => {
-    const instance = new Constructor()
-
-    this._systems.push(instance)
+  ): IEcsWorld<TDependencies> => {
+    this._systems.push(new Constructor())
 
     return this
   }
 
   public createEntity = <T extends object[]>(): IEntity<T> => {
     const entity = new Entity(this)
-    this.entitiesMap = new Map(this._entitiesMap).set(entity, new Map())
+    this._entitiesMap = new Map(this._entitiesMap).set(entity, new Map())
 
     return entity
   }
@@ -46,12 +44,28 @@ export default class World<TDependencies extends object>
   ): void => {
     const instance = new Constructor(...fallbackConstructorArgs(initialValues))
 
-    this.entitiesMap = new Map(this._entitiesMap).set(
+    this._entitiesMap = new Map(this._entitiesMap).set(
       entity,
-      new Map(this._entitiesMap.get(entity) || []).set(
+      new Map(this.getEntityComponents(entity) || []).set(
         Constructor.name,
         instance
       )
+    )
+  }
+
+  public removeEntityComponent = <
+    U extends object,
+    T extends IComponentConstructor<U>
+  >(
+    entity: IEntity<any>,
+    Constructor: T
+  ): void => {
+    const newEntityComponents = new Map(this.getEntityComponents(entity) || [])
+    newEntityComponents.delete(Constructor.name)
+
+    this._entitiesMap = new Map(this._entitiesMap).set(
+      entity,
+      newEntityComponents
     )
   }
 
@@ -78,21 +92,18 @@ export default class World<TDependencies extends object>
   }
 
   public getEntityComponents = (entity: IEntity<any>) =>
-    this._entitiesMap.get(entity);
+    this._entitiesMap.get(entity)
 
   public get systems() {
     return this._systems
   }
 
-  public getEntitiesMap() {
-    return this._entitiesMap
-  }
 
   private getEntities = <T extends object[]>(
     components: TComponentConstructors<T>
-  ) => collectEntities(components, this._entitiesMap);
+  ) => collectEntities(components, this._entitiesMap)
 
-  private set entitiesMap(value: TEntityComponentMap) {
-    this._entitiesMap = value
+  public get entitiesMap() {
+    return this._entitiesMap
   }
 }

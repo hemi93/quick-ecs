@@ -8,8 +8,7 @@ export default abstract class System<
   > implements ISystem<T, TDependencies> {
   protected _components: TComponentConstructors<
     T
-  > = ([] as unknown) as TComponentConstructors<T>;
-
+  > = ([] as unknown) as TComponentConstructors<T>
   public get components() {
     return this._components
   }
@@ -18,7 +17,7 @@ export default abstract class System<
     this._components = components
 
     return this
-  };
+  }
 
   /* istanbul ignore next */
   public async init(_dependencies: TDependencies) {
@@ -33,5 +32,5 @@ export default abstract class System<
   /**
    * Override this function with actual behavior for entities containing System Components.
    */
-  public abstract update(entity: IEntity<T>, dependencies: TDependencies): void;
+  public abstract update(entity: IEntity<T>, dependencies: TDependencies): void
 }
