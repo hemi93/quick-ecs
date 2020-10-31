@@ -60,9 +60,12 @@ describe('World', () => {
       })
 
       it('getComponent in entity returns component', () => {
-        const {args} = entity.getComponent(FakeComponentWithArgs)
+        expect.assertions(1)
+        const component = entity.getComponent(FakeComponentWithArgs)
 
-        expect(args).toEqual(0)
+        if (component) {
+          expect(component.args).toEqual(0)
+        }
       })
     })
 
@@ -72,9 +75,12 @@ describe('World', () => {
       })
 
       it('getComponent in entity returns component', () => {
-        const {value} = entity.getComponent(FakeComponentWithNoArgs)
+        expect.assertions(1)
+        const component = entity.getComponent(FakeComponentWithNoArgs)
 
-        expect(value).toBeDefined()
+        if (component) {
+          expect(component.value).toBeDefined()
+        }
       })
     })
   })
@@ -94,9 +100,10 @@ describe('World', () => {
       })
 
       it('getComponent in entity returns component', () => {
-        const {args} = entity.getComponent(FakeComponentWithArgs)
+        expect.assertions(1)
+        const component = entity.getComponent(FakeComponentWithArgs)
 
-        expect(args).toEqual(0)
+        expect(component).toBeUndefined()
       })
     })
   })
