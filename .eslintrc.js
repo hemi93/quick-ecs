@@ -12,12 +12,16 @@ module.exports = {
   plugins: ["@typescript-eslint", "simple-import-sort"],
   rules: {
     "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/interface-name-prefix": ["error", "always"],
     "@typescript-eslint/member-ordering": ["error"],
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
-    "@typescript-eslint/quotes": ["error", "double"],
     "@typescript-eslint/quotes": ["error", "single"],
+    "@typescript-eslint/member-delimiter-style": ["error", {
+      "multiline": {
+          "delimiter": "none",
+          "requireLast": false
+      },
+    }],
     "arrow-body-style": ["error", "as-needed"],
     "eol-last": ["error", "always"],
     "linebreak-style": ["error", "unix"],
@@ -34,7 +38,6 @@ module.exports = {
     "rest-spread-spacing": ["error", "never"],
     "simple-import-sort/sort": "error",
     eqeqeq: "error",
-    quotes: "off",
     quotes: "off",
     semi: ["error", "never"]
   }

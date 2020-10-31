@@ -1,20 +1,13 @@
 import {ElementType,IComponentConstructor} from '../types'
-import {uuidv4} from '../utils'
-import {IWorld} from '../world/types'
+import {IEcsWorld} from '../world/types'
 import {IEntity} from './types'
 
-export default class Entity<TComponents extends object[]>
+export default class Entity<TComponents extends Record<any, any>[]>
   implements IEntity<TComponents> {
-  private readonly _id: string;
-  private readonly _world: IWorld;
+  private readonly _world: IEcsWorld
 
-  constructor(world: IWorld) {
+  constructor(world: IEcsWorld) {
     this._world = world
-    this._id = uuidv4()
-  }
-
-  public get id() {
-    return this._id
   }
 
   public addComponent = <U extends ElementType<TComponents>>(
@@ -28,25 +21,28 @@ export default class Entity<TComponents extends object[]>
     )
 
     return this
-  };
+  }
 
   public getComponent = <U extends ElementType<TComponents>>(
     Component: IComponentConstructor<U>
-  ): U => {
-    const componentInstance = this._world.getEntityComponents(this)?.get(Component.name)
+  ): U | undefined => this._world.getEntityComponents(this)?.get(Component.name) as U | undefined
 
-    if (!componentInstance) {
-      throw new Error(`Entity "${this.id}" does not have "${Component.name}"!`)
-    }
+  public removeComponent = <U extends ElementType<TComponents>>(
+    Component: IComponentConstructor<U>
+  ): IEntity<TComponents> => {
+    this._world.removeEntityComponent<TComponents, U>(
+      this,
+      Component
+    )
 
-    return componentInstance as U
-  };
+    return this
+  }
 
   /* istanbul ignore next */
-  public debug = () => {
+  public debug = (): void => {
     console.debug({
-      id: this.id,
+      entity: this,
       components: this._world.getEntityComponents<TComponents>(this)
     })
-  };
+  }
 }

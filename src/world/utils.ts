@@ -1,6 +1,6 @@
 import {IEntity} from '../entity/types'
 import {ISystem} from '../system/types'
-import {IComponentConstructor, TComponentConstructors} from '../types'
+import {IComponentConstructor, TComponentBase, TComponentConstructors} from '../types'
 import {getEntityLookupCache} from './entityLookupCache'
 import {TEntityComponentMap} from './types'
 
@@ -10,7 +10,7 @@ const cache = getEntityLookupCache()
  * Check if all components (by names) are present in components map.
  */
 const isMatch = (
-  entityComponents: ReadonlyMap<string, object>,
+  entityComponents: ReadonlyMap<string, TComponentBase>,
   components: TComponentConstructors<any>
 ) =>
   components.every(({name}) => entityComponents.has(name))
@@ -48,8 +48,8 @@ export const collectEntities = (
  * Use this to fall back to empty array of constructor arguments when none are needed and provided.
  */
 export const fallbackConstructorArgs = <
-  U extends object[],
+  U extends TComponentBase[],
   T extends IComponentConstructor<ISystem<U, any>>
 >(
   initialValues?: ConstructorParameters<T>
-) => initialValues || ([] as any[])
+): ConstructorParameters<T> => initialValues || ([] as ConstructorParameters<T>)

@@ -1,20 +1,20 @@
 import {IEntity} from '../entity/types'
-import {IComponentConstructor, TComponentConstructors} from '../types'
+import {IComponentConstructor, TComponentBase, TComponentConstructors} from '../types'
 
 export interface ISystem<
-  T extends object[],
+  T extends TComponentBase[],
   TSystemDependencies = Record<string, any>
 > {
   /**
    * Array of System Component constructors used to fetch System Entities from World.
    */
-  readonly components: TComponentConstructors<T>;
+  readonly components: TComponentConstructors<T>
   /**
    * Set components for System.
    *
    * **IMPORTANT** Remember to call this in System's constructor!
    */
-  setComponents(...components: IComponentConstructor<any>[]): void;
+  setComponents(...components: IComponentConstructor<any>[]): void
   /**
    * Runs immediately before `update()` function for this system.
    *
@@ -24,7 +24,7 @@ export interface ISystem<
    *
    * @param dependencies Dependencies passed to World on its creation.
    */
-  preUpdate(dependencies: TSystemDependencies): void;
+  preUpdate(dependencies: TSystemDependencies): void
   /**
    * Update individual Entity for this System.
    * Called for each Entity for this System on each update loop.
@@ -35,7 +35,7 @@ export interface ISystem<
    * @param entity Instance of the entity to update.
    * @param dependencies Dependencies passed to World on its creation.
    */
-  update(entity: IEntity<T>, dependencies: TSystemDependencies): void;
+  update(entity: IEntity<T>, dependencies: TSystemDependencies): void
   /**
    * Asynchronously set up this System.
    *
@@ -45,5 +45,5 @@ export interface ISystem<
    *
    * @param dependencies Dependencies passed to World on its creation.
    */
-  init(dependencies: TSystemDependencies): Promise<void>;
+  init(dependencies: TSystemDependencies): Promise<void>
 }
