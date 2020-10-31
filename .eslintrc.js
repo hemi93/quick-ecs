@@ -12,7 +12,6 @@ module.exports = {
   plugins: ["@typescript-eslint", "simple-import-sort"],
   rules: {
     "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/interface-name-prefix": ["error", "always"],
     "@typescript-eslint/member-ordering": ["error"],
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],

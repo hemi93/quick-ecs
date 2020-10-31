@@ -2,7 +2,7 @@ import {ElementType,IComponentConstructor} from '../types'
 import {IEcsWorld} from '../world/types'
 import {IEntity} from './types'
 
-export default class Entity<TComponents extends object[]>
+export default class Entity<TComponents extends Record<any, any>[]>
   implements IEntity<TComponents> {
   private readonly _world: IEcsWorld
 
@@ -39,7 +39,7 @@ export default class Entity<TComponents extends object[]>
   }
 
   /* istanbul ignore next */
-  public debug = () => {
+  public debug = (): void => {
     console.debug({
       entity: this,
       components: this._world.getEntityComponents<TComponents>(this)

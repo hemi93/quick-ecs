@@ -1,8 +1,10 @@
-export interface IComponentConstructor<T extends object> {
+export type TComponentBase = Record<any, any>
+
+export interface IComponentConstructor<T extends TComponentBase> {
   new (...args: any): T
 }
 
-export type TComponentConstructors<T extends object[]> = IComponentConstructor<
+export type TComponentConstructors<T extends TComponentBase[]> = IComponentConstructor<
   ElementType<T>
 >[]
 

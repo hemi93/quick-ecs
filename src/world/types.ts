@@ -1,22 +1,22 @@
 import {IEntity} from '../entity/types'
 import {ISystem} from '../system/types'
-import {ElementType,IComponentConstructor} from '../types'
+import {ElementType, IComponentConstructor, TComponentBase} from '../types'
 
-export type TEntityComponentMap = ReadonlyMap<IEntity<object[]>, ReadonlyMap<string, object>>
+export type TEntityComponentMap = ReadonlyMap<IEntity<TComponentBase[]>, ReadonlyMap<string, TComponentBase>>
 
 /**
  * ECS World.
  *
  * This interface is exposed to outside modules using `quick-ecs`.
  */
-export interface IWorld<TDependencies extends object> {
+export interface IWorld<TDependencies extends TComponentBase> {
   /**
    * Add system to World.
    * @param SystemConstructor Constructor of the System.
    * @param initialValues Array of optional initial values that will be passed to System constructor.
    */
   addSystem<
-    U extends object[],
+    U extends TComponentBase[],
     T extends IComponentConstructor<ISystem<U, TDependencies>>
   >(
     SystemConstructor: T
@@ -24,7 +24,7 @@ export interface IWorld<TDependencies extends object> {
   /**
    * Create empty Entity.
    */
-  createEntity<T extends object[]>(): IEntity<T>
+  createEntity<T extends TComponentBase[]>(): IEntity<T>
   /**
    * Update all systems.
    */
@@ -44,7 +44,7 @@ export interface IWorld<TDependencies extends object> {
  *
  * Exposes methods that are needed for other classes **inside** quick-ecs.
  */
-export interface IEcsWorld<TDependencies extends object = object>
+export interface IEcsWorld<TDependencies extends TComponentBase = TComponentBase>
   extends IWorld<TDependencies> {
   /**
    * **Exposed only for tests!**
@@ -64,7 +64,7 @@ export interface IEcsWorld<TDependencies extends object = object>
    * @param initialValues Optional array of initial constructor arguments.
    */
   addEntityComponent<
-    TComponents extends object[],
+    TComponents extends TComponentBase[],
     U extends ElementType<TComponents>
   >(
     entity: IEntity<TComponents>,
@@ -76,9 +76,9 @@ export interface IEcsWorld<TDependencies extends object = object>
    *
    * @param entity Entity instance.
    */
-  getEntityComponents<T extends object[]>(
+  getEntityComponents<T extends TComponentBase[]>(
     entity: IEntity<T>
-  ): ReadonlyMap<string, object> | undefined
+  ): ReadonlyMap<string, TComponentBase> | undefined
     /**
    * Create instance of Component and add it to Entity.
    * This doesn't modify Entity, but creates link in World between entity and created component instance.
@@ -88,7 +88,7 @@ export interface IEcsWorld<TDependencies extends object = object>
    * @param initialValues Optional array of initial constructor arguments.
    */
   removeEntityComponent<
-    TComponents extends object[],
+    TComponents extends TComponentBase[],
     U extends ElementType<TComponents>
   >(
     entity: IEntity<TComponents>,

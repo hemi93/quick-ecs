@@ -1,31 +1,32 @@
 import {IEntity} from '../entity/types'
-import {TComponentConstructors} from '../types'
+import {TComponentBase, TComponentConstructors} from '../types'
 import {ISystem} from './types'
 
 export default abstract class System<
-  T extends object[],
-  TDependencies extends object = any
+  T extends TComponentBase[],
+  TDependencies extends TComponentBase = any
   > implements ISystem<T, TDependencies> {
   protected _components: TComponentConstructors<
     T
   > = ([] as unknown) as TComponentConstructors<T>
-  public get components() {
+
+  public get components(): TComponentConstructors<T> {
     return this._components
   }
 
-  public setComponents = (...components: TComponentConstructors<T>) => {
+  public setComponents = (...components: TComponentConstructors<T>): this => {
     this._components = components
 
     return this
   }
 
   /* istanbul ignore next */
-  public async init(_dependencies: TDependencies) {
+  public async init(_dependencies: TDependencies): Promise<void> {
     // Optionally override in deriving class
   }
 
   /* istanbul ignore next */
-  public preUpdate(_dependencies: TDependencies) {
+  public preUpdate(_dependencies: TDependencies): void {
     // Optionally override in deriving class
   }
 

@@ -1,6 +1,6 @@
-import {ElementType,IComponentConstructor} from '../types'
+import {ElementType,IComponentConstructor, TComponentBase} from '../types'
 
-export interface IEntity<TComponents extends object[]> {
+export interface IEntity<TComponents extends TComponentBase[]> {
   /**
    * Create and add Component to Entity.
    */

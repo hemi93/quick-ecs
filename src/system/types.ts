@@ -1,8 +1,8 @@
 import {IEntity} from '../entity/types'
-import {IComponentConstructor, TComponentConstructors} from '../types'
+import {IComponentConstructor, TComponentBase, TComponentConstructors} from '../types'
 
 export interface ISystem<
-  T extends object[],
+  T extends TComponentBase[],
   TSystemDependencies = Record<string, any>
 > {
   /**
