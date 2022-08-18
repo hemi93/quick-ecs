@@ -1,9 +1,15 @@
 import { IEntity } from "../entity/types";
 import { ISystem } from "../system/types";
-import { OneOf, IAbstractConstructor, TAnyConstructor } from "../types";
+import {
+  OneOf,
+  IAbstractConstructor,
+  TAnyConstructor,
+  TAnyConstructors,
+  TBaseDependencies
+} from "../types";
 
 export type TEntityComponentMap = ReadonlyMap<
-  IEntity<TAnyConstructor[]>,
+  IEntity<TAnyConstructors>,
   ReadonlyMap<string, TAnyConstructor>
 >;
 
@@ -12,13 +18,15 @@ export type TEntityComponentMap = ReadonlyMap<
  *
  * This interface is exposed to outside modules using `quick-ecs`.
  */
-export interface IWorld<TDependencies extends Record<string, unknown>> {
+export interface IWorld<
+  TDependencies extends TBaseDependencies = TBaseDependencies
+> {
   /**
    * Add system to World.
    * @param SystemConstructor Constructor of the System.
    */
   addSystem<
-    U extends TAnyConstructor[],
+    U extends TAnyConstructors,
     T extends IAbstractConstructor<ISystem<U, TDependencies>>
   >(
     SystemConstructor: T
@@ -26,7 +34,7 @@ export interface IWorld<TDependencies extends Record<string, unknown>> {
   /**
    * Create empty Entity.
    */
-  createEntity<T extends TAnyConstructor[]>(): IEntity<T>;
+  createEntity<T extends TAnyConstructors>(): IEntity<T>;
   /**
    * Update all systems.
    */
@@ -38,7 +46,7 @@ export interface IWorld<TDependencies extends Record<string, unknown>> {
   /**
    * Remove Entity from World.
    */
-  removeEntity<T extends TAnyConstructor[]>(entity: IEntity<T>): void;
+  removeEntity<T extends TAnyConstructors>(entity: IEntity<T>): void;
 }
 
 /**
@@ -47,7 +55,7 @@ export interface IWorld<TDependencies extends Record<string, unknown>> {
  * Exposes methods that are needed for other classes **inside** quick-ecs.
  */
 export interface IEcsWorld<
-  TDependencies extends Record<string, unknown> = Record<string, unknown>
+  TDependencies extends TBaseDependencies = TBaseDependencies
 > extends IWorld<TDependencies> {
   /**
    * **Exposed only for tests!**
@@ -67,7 +75,7 @@ export interface IEcsWorld<
    * @param initialValues Optional array of initial constructor arguments.
    */
   addEntityComponent<
-    TComponents extends TAnyConstructor[],
+    TComponents extends TAnyConstructors,
     U extends OneOf<TComponents>
   >(
     entity: IEntity<TComponents>,
@@ -79,7 +87,7 @@ export interface IEcsWorld<
    *
    * @param entity Entity instance.
    */
-  getEntityComponents<T extends TAnyConstructor[]>(
+  getEntityComponents<T extends TAnyConstructors>(
     entity: IEntity<T>
   ): ReadonlyMap<string, TAnyConstructor> | undefined;
   /**
@@ -91,7 +99,7 @@ export interface IEcsWorld<
    * @param initialValues Optional array of initial constructor arguments.
    */
   removeEntityComponent<
-    TComponents extends TAnyConstructor[],
+    TComponents extends TAnyConstructors,
     U extends OneOf<TComponents>
   >(
     entity: IEntity<TComponents>,

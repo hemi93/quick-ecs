@@ -1,6 +1,7 @@
-import { OneOf, TAnyConstructor } from "../types";
+import { TAnyConstructors } from "../types";
+import { OneOf } from "../types";
 
-export interface IEntity<TComponents extends TAnyConstructor[]> {
+export interface IEntity<TComponents extends TAnyConstructors> {
   /**
    * Create and add Component to Entity.
    */

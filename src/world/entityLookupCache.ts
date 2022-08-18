@@ -1,15 +1,15 @@
 import { IEntity } from "entity/types";
-import { TAnyConstructor } from "types";
+import { TAnyConstructors } from "types";
 
 import { TEntityComponentMap } from "./types";
 
 interface IEntityLookupCache {
   get: (
-    components: TAnyConstructor[],
+    components: TAnyConstructors,
     entitiesMap: TEntityComponentMap
   ) => readonly IEntity<[]>[] | undefined;
   set: (
-    components: TAnyConstructor[],
+    components: TAnyConstructors,
     entitiesMap: TEntityComponentMap,
     entities: readonly IEntity<[]>[]
   ) => void;
@@ -24,14 +24,14 @@ interface IEntityLookupCache {
 export const getEntityLookupCache = (): IEntityLookupCache => {
   const cache: WeakMap<
     TEntityComponentMap,
-    WeakMap<TAnyConstructor[], readonly IEntity<[]>[]>
+    WeakMap<TAnyConstructors, readonly IEntity<[]>[]>
   > = new WeakMap();
 
   return {
-    get: (components: TAnyConstructor[], entitiesMap: TEntityComponentMap) =>
+    get: (components: TAnyConstructors, entitiesMap: TEntityComponentMap) =>
       cache.get(entitiesMap)?.get(components),
     set: (
-      components: TAnyConstructor[],
+      components: TAnyConstructors,
       entitiesMap: TEntityComponentMap,
       entities: readonly IEntity<[]>[]
     ) => {

@@ -1,8 +1,8 @@
-import { OneOf, IAbstractConstructor, TAnyConstructor } from "../types";
+import { OneOf, IAbstractConstructor, TAnyConstructors } from "../types";
 import { IEcsWorld } from "../world/types";
 import { IEntity } from "./types";
 
-export default class Entity<TComponents extends TAnyConstructor[]>
+export default class Entity<TComponents extends TAnyConstructors>
   implements IEntity<TComponents>
 {
   private readonly _world: IEcsWorld;

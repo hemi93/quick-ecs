@@ -1,9 +1,13 @@
 import { IEntity } from "../entity/types";
-import { TAnyConstructor, TComponentConstructors } from "../types";
+import {
+  TAnyConstructors,
+  TBaseDependencies,
+  TComponentConstructors
+} from "../types";
 
 export interface ISystem<
-  T extends TAnyConstructor[],
-  TSystemDependencies = Record<string, unknown>
+  T extends TAnyConstructors,
+  TSystemDependencies extends TBaseDependencies = TBaseDependencies
 > {
   /**
    * Array of System Component constructors used to fetch System Entities from World.

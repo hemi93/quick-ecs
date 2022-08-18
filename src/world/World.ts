@@ -4,14 +4,15 @@ import { ISystem } from "../system/types";
 import {
   IAbstractConstructor,
   TAnyConstructor,
+  TAnyConstructors,
+  TBaseDependencies,
   TComponentConstructors
 } from "../types";
 import { IEcsWorld, TEntityComponentMap } from "./types";
 import { collectEntities } from "./utils";
 
-export default class World<
-  TDependencies extends Record<string, unknown> | never
-> implements IEcsWorld<TDependencies>
+export default class World<TDependencies extends TBaseDependencies | never>
+  implements IEcsWorld<TDependencies>
 {
   private _entitiesMap: TEntityComponentMap;
   private readonly _dependencies: TDependencies;
@@ -31,7 +32,7 @@ export default class World<
   }
 
   public addSystem = <
-    U extends TAnyConstructor[],
+    U extends TAnyConstructors,
     T extends IAbstractConstructor<ISystem<U, TDependencies>>
   >(
     Constructor: T
@@ -41,7 +42,7 @@ export default class World<
     return this;
   };
 
-  public createEntity = <T extends TAnyConstructor[]>(): IEntity<T> => {
+  public createEntity = <T extends TAnyConstructors>(): IEntity<T> => {
     const entity = new Entity(this);
     this._entitiesMap = new Map(this._entitiesMap).set(entity, new Map());
 
@@ -99,7 +100,7 @@ export default class World<
     }
   };
 
-  public removeEntity = <T extends TAnyConstructor[]>(
+  public removeEntity = <T extends TAnyConstructors>(
     entity: IEntity<T>
   ): void => {
     const newEntitiesMap = new Map(this._entitiesMap);
@@ -107,12 +108,12 @@ export default class World<
     this._entitiesMap = newEntitiesMap;
   };
 
-  public getEntityComponents = <T extends TAnyConstructor[]>(
+  public getEntityComponents = <T extends TAnyConstructors>(
     entity: IEntity<T>
   ): ReadonlyMap<string, TAnyConstructor> | undefined =>
     this._entitiesMap.get(entity);
 
-  private getEntities = <T extends TAnyConstructor[]>(
+  private getEntities = <T extends TAnyConstructors>(
     components: TComponentConstructors<T>
   ) => collectEntities(components, this._entitiesMap);
 }
