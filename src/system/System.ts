@@ -1,24 +1,28 @@
-import {IEntity} from '../entity/types'
-import {TComponentBase, TComponentConstructors} from '../types'
-import {ISystem} from './types'
+import { IEntity } from "../entity/types";
+import {
+  TAnyConstructors,
+  TBaseDependencies,
+  TComponentConstructors
+} from "../types";
+import { ISystem } from "./types";
 
 export default abstract class System<
-  T extends TComponentBase[],
-  TDependencies extends TComponentBase = any
-  > implements ISystem<T, TDependencies> {
-  protected _components: TComponentConstructors<
-    T
-  > = ([] as unknown) as TComponentConstructors<T>
+  TComponentBases extends TAnyConstructors,
+  TDependencies extends TBaseDependencies
+> implements ISystem<TComponentBases, TDependencies>
+{
+  protected _components: TComponentConstructors<TComponentBases> =
+    [] as TComponentConstructors<TComponentBases>;
 
-  public get components(): TComponentConstructors<T> {
-    return this._components
+  public get components(): TComponentConstructors<TComponentBases> {
+    return this._components;
   }
 
-  public setComponents = (...components: TComponentConstructors<T>): this => {
-    this._components = components
+  public setComponents = (...components: TComponentBases): this => {
+    this._components = components;
 
-    return this
-  }
+    return this;
+  };
 
   /* istanbul ignore next */
   public async init(_dependencies: TDependencies): Promise<void> {
@@ -33,5 +37,8 @@ export default abstract class System<
   /**
    * Override this function with actual behavior for entities containing System Components.
    */
-  public abstract update(entity: IEntity<T>, dependencies: TDependencies): void
+  public abstract update(
+    entity: IEntity<TComponentBases>,
+    dependencies: TDependencies
+  ): void;
 }

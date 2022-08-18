@@ -1,29 +1,30 @@
-import {ElementType,IComponentConstructor, TComponentBase} from '../types'
+import { TAnyConstructors } from "../types";
+import { OneOf } from "../types";
 
-export interface IEntity<TComponents extends TComponentBase[]> {
+export interface IEntity<TComponents extends TAnyConstructors> {
   /**
    * Create and add Component to Entity.
    */
-  addComponent<U extends ElementType<TComponents>>(
-    Component: IComponentConstructor<U>,
-    initialValues?: ConstructorParameters<IComponentConstructor<U>>
-  ): IEntity<TComponents>
-    /**
+  addComponent<T extends OneOf<TComponents>>(
+    Component: T,
+    ...initialValues: ConstructorParameters<T>
+  ): IEntity<TComponents>;
+  /**
    * Get Component instance assigned to Entity.
    */
-  getComponent<U extends ElementType<TComponents>>(
-    Component: IComponentConstructor<U>
-  ): U | undefined
+  getComponent<T extends OneOf<TComponents>>(
+    Component: T
+  ): InstanceType<T> | undefined;
   /**
    * Remove Component from Entity.
    */
-  removeComponent<U extends ElementType<TComponents>>(
-    Component: IComponentConstructor<U>
-  ): IEntity<TComponents>
+  removeComponent<U extends OneOf<TComponents>>(
+    Component: U
+  ): IEntity<TComponents>;
   /**
    * Use console.debug method to print basic information about this Entity.
    *
    * Make sure you have console.debug level enabled in browser to see the logs!
    */
-  debug(): void
+  debug(): void;
 }

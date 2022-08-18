@@ -9,11 +9,11 @@ Bring Entity-Component-System architecture to your project in quick, simple and 
 
 ## Features
 
-- Fully generic - should integrate nicely with any engine
+- Generic, should integrate nicely with virtually any JS game engine
 - Accessing global Dependencies in Systems with built-in DI
 - Lifecycle methods for Systems (init, preUpdate, update) allowing for easy setup
 - Defining any combination of Components for System
-- Lightweight, simple and with no runtime dependencies
+- Lightweight, simple and with **no runtime dependencies**
 - Method chaining for convenient Entity manipulation
 - Full TypeScript support
 
@@ -79,7 +79,7 @@ class ExampleComponent {
 /**
  * Define type for components that this system will handle.
  */
-type TExampleSystemComponents = [ExampleComponent]
+type TExampleSystemComponents = [typeof ExampleComponent]
 
 export default class ExampleSystem extends System<
   TExampleSystemComponents,
@@ -126,7 +126,7 @@ export const main = async ({timer, runRenderLoop}: IExampleEngine) => {
    * Second argument of addComponent accepts array of constructor params, type safe!
    */
   const entity = world.createEntity<TExampleSystemComponents>();
-  entity.addComponent(ExampleComponent, [0]);
+  entity.addComponent(ExampleComponent, 0);
 
   // Initialize the World. This runs all init functions in added Systems.
   await world.init();

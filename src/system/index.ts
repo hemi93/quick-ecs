@@ -1,6 +1,9 @@
-import {TComponentBase} from '../types'
-import System from './System'
+import { TAnyConstructors, TBaseDependencies } from "../types";
+import System from "./System";
 
-export {System}
+export { System };
 
-export type ISystem<T extends TComponentBase[]> = import('./types').ISystem<T>
+export type ISystem<
+  T extends TAnyConstructors,
+  TDeps extends TBaseDependencies = TBaseDependencies
+> = import("./types").ISystem<T, TDeps>;
