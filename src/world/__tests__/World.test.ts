@@ -8,6 +8,9 @@ import { IEntity } from "../../entity/types";
 import { ISystem } from "../../system/types";
 import { IEcsWorld } from "../types";
 import World from "../World";
+import FakeSystemSingleComponent, {
+  TFakeSystemSingleComponents
+} from "../../__tests__/__fakes__/FakeSystemSingleComponent";
 
 type TTestDeps = {
   test: string;
@@ -126,27 +129,47 @@ describe("World", () => {
   });
 
   describe("update", () => {
-    let systemUpdateSpy: jest.SpyInstance;
-    let systemPreUpdateSpy: jest.SpyInstance;
-    let entity: IEntity<TFakeSystemComponents>;
+    let system1UpdateSpy: jest.SpyInstance;
+    let system2UpdateSpy: jest.SpyInstance;
+    let system1PreUpdateSpy: jest.SpyInstance;
+    let entity1: IEntity<TFakeSystemComponents>;
+    let entity2: IEntity<TFakeSystemSingleComponents>;
 
     beforeEach(async () => {
       world.addSystem(FakeSystem);
-      entity = world
+      world.addSystem(FakeSystemSingleComponent);
+      entity1 = world
         .createEntity<TFakeSystemComponents>()
         .addComponent(FakeComponentWithNoArgs)
         .addComponent(FakeComponentWithArgs, 0, "test");
-      systemUpdateSpy = jest.spyOn(world.systems[0], "update");
-      systemPreUpdateSpy = jest.spyOn(world.systems[0], "preUpdate");
+      entity2 = world
+        .createEntity<TFakeSystemSingleComponents>()
+        .addComponent(FakeComponentWithArgs, 0, "test");
+      system1UpdateSpy = jest.spyOn(world.systems[0], "update");
+      system1PreUpdateSpy = jest.spyOn(world.systems[0], "preUpdate");
+
+      system2UpdateSpy = jest.spyOn(world.systems[1], "update");
       await world.init();
       world.update();
     });
 
     it("runs preUpdate with deps", () =>
-      expect(systemPreUpdateSpy).toHaveBeenCalledWith(deps));
+      expect(system1PreUpdateSpy).toHaveBeenCalledWith(deps));
 
-    it("runs update with matching entity and deps", () =>
-      expect(systemUpdateSpy).toHaveBeenCalledWith(entity, deps));
+    it("tuns system 1 update only for matching entity", () =>
+      expect(system1UpdateSpy).toHaveBeenCalledTimes(1));
+
+    it("runs system 1 update with matching entity and deps", () =>
+      expect(system1UpdateSpy).toHaveBeenCalledWith(entity1, deps));
+
+    it("tuns system 2 update for both matching entities", () =>
+      expect(system2UpdateSpy).toHaveBeenCalledTimes(2));
+
+    it("runs system 2 update with matching entity and deps", () =>
+      expect(system2UpdateSpy).toHaveBeenNthCalledWith(1, entity1, deps));
+
+    it("runs system 2 update with matching entity and deps", () =>
+      expect(system2UpdateSpy).toHaveBeenNthCalledWith(2, entity2, deps));
   });
 
   describe("removeEntity", () => {

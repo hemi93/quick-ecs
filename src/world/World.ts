@@ -74,7 +74,7 @@ export default class World<
     entity: IEntity<[U]>,
     Constructor: T
   ): void => {
-    const newEntityComponents = new Map(this.getEntityComponents(entity) || []);
+    const newEntityComponents = new Map(this.getEntityComponents(entity) ?? []);
     newEntityComponents.delete(Constructor.name);
 
     this._entitiesMap = new Map(this._entitiesMap).set(

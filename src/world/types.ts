@@ -72,7 +72,7 @@ export interface IEcsWorld<
   >(
     entity: IEntity<TComponents>,
     Component: IAbstractConstructor<U>,
-    initialValues?: ConstructorParameters<U>
+    ...initialValues: ConstructorParameters<U>
   ): void;
   /**
    * Get map of Component `name -> instance` linked to given Entity.

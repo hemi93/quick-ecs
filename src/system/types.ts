@@ -12,7 +12,7 @@ export interface ISystem<
   /**
    * Set components for System.
    *
-   * **IMPORTANT** Remember to call this in System's constructor!
+   * @important Remember to call this in System's constructor!
    */
   setComponents(...components: T): void;
   /**

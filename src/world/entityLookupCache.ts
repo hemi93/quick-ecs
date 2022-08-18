@@ -19,6 +19,7 @@ interface IEntityLookupCache {
  * Creates entity lookup cache.
  *
  * This is based on WeakMaps, so no manual cleaning is needed.
+ * @important Make sure components array is always the same instance for given set of entities.
  */
 export const getEntityLookupCache = (): IEntityLookupCache => {
   const cache: WeakMap<
