@@ -13,7 +13,7 @@ Bring Entity-Component-System architecture to your project in quick, simple and 
 - Accessing global Dependencies in Systems with built-in DI
 - Lifecycle methods for Systems (init, preUpdate, update) allowing for easy setup
 - Defining any combination of Components for System
-- Lightweight, simple and with no runtime dependencies
+- Lightweight, simple and with **no runtime dependencies**
 - Method chaining for convenient Entity manipulation
 - Full TypeScript support
 

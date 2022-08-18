@@ -25,7 +25,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm install -g yarn
       - run: yarn --frozen-lockfile
-      - run: yarn build:ci
+      - run: yarn build --noEmit
       - run: yarn lint
       - run: yarn test
         env:
