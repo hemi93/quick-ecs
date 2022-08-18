@@ -9,7 +9,7 @@ Bring Entity-Component-System architecture to your project in quick, simple and 
 
 ## Features
 
-- Fully generic - should integrate nicely with any engine
+- Generic, should integrate nicely with virtually any JS game engine
 - Accessing global Dependencies in Systems with built-in DI
 - Lifecycle methods for Systems (init, preUpdate, update) allowing for easy setup
 - Defining any combination of Components for System
@@ -126,7 +126,7 @@ export const main = async ({timer, runRenderLoop}: IExampleEngine) => {
    * Second argument of addComponent accepts array of constructor params, type safe!
    */
   const entity = world.createEntity<TExampleSystemComponents>();
-  entity.addComponent(ExampleComponent, [0]);
+  entity.addComponent(ExampleComponent, 0);
 
   // Initialize the World. This runs all init functions in added Systems.
   await world.init();
