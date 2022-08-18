@@ -14,7 +14,8 @@
     "outDir": "./build",
     "declaration": true,
     "removeComments": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "suppressImplicitAnyIndexErrors": true
   },
   "include": ["src/**/*.ts"],
   "exclude": ["src/**/__tests__/*"]

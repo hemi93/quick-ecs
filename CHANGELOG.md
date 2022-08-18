@@ -1,4 +1,19 @@
-# 0.3.0
+# CHANGELOG
+
+## 1.0.0
+
+- [BREAKING] IEntity is now typed differently - it requires `typeof` modifier for components. Example:
+
+```tsx
+  let entity: IEntity<
+    [
+      typeof FakeComponentWithNoArgs,
+      typeof FakeComponentWithArgs
+    ]
+  >;
+```
+
+## 0.3.0
 
 - docs: Added CHANGELOG.
 - feat: [#11](https://github.com/hemi93/quick-ecs/issues/11) - added `Entity.removeComponent` method.

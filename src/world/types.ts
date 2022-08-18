@@ -1,42 +1,44 @@
-import {IEntity} from '../entity/types'
-import {ISystem} from '../system/types'
-import {ElementType, IComponentConstructor, TComponentBase} from '../types'
+import { IEntity } from "../entity/types";
+import { ISystem } from "../system/types";
+import { OneOf, IAbstractConstructor, TAnyConstructor } from "../types";
 
-export type TEntityComponentMap = ReadonlyMap<IEntity<TComponentBase[]>, ReadonlyMap<string, TComponentBase>>
+export type TEntityComponentMap = ReadonlyMap<
+  IEntity<TAnyConstructor[]>,
+  ReadonlyMap<string, TAnyConstructor>
+>;
 
 /**
  * ECS World.
  *
  * This interface is exposed to outside modules using `quick-ecs`.
  */
-export interface IWorld<TDependencies extends TComponentBase> {
+export interface IWorld<TDependencies extends Record<string, unknown>> {
   /**
    * Add system to World.
    * @param SystemConstructor Constructor of the System.
-   * @param initialValues Array of optional initial values that will be passed to System constructor.
    */
   addSystem<
-    U extends TComponentBase[],
-    T extends IComponentConstructor<ISystem<U, TDependencies>>
+    U extends TAnyConstructor[],
+    T extends IAbstractConstructor<ISystem<U, TDependencies>>
   >(
     SystemConstructor: T
-  ): IEcsWorld<TDependencies>
+  ): IEcsWorld<TDependencies>;
   /**
    * Create empty Entity.
    */
-  createEntity<T extends TComponentBase[]>(): IEntity<T>
+  createEntity<T extends TAnyConstructor[]>(): IEntity<T>;
   /**
    * Update all systems.
    */
-  update(): void
+  update(): void;
   /**
    * Asynchronously initialize all added Systems at the same time.
    */
-  init(): Promise<void>
+  init(): Promise<void>;
   /**
    * Remove Entity from World.
    */
-  removeEntity(entity: IEntity<any>): void
+  removeEntity<T extends TAnyConstructor[]>(entity: IEntity<T>): void;
 }
 
 /**
@@ -44,16 +46,17 @@ export interface IWorld<TDependencies extends TComponentBase> {
  *
  * Exposes methods that are needed for other classes **inside** quick-ecs.
  */
-export interface IEcsWorld<TDependencies extends TComponentBase = TComponentBase>
-  extends IWorld<TDependencies> {
+export interface IEcsWorld<
+  TDependencies extends Record<string, unknown> = Record<string, unknown>
+> extends IWorld<TDependencies> {
   /**
    * **Exposed only for tests!**
    */
-  readonly systems: ISystem<any, TDependencies>[]
+  readonly systems: ISystem<[], TDependencies>[];
   /**
-  * **Exposed only for tests!**
-  */
-  readonly entitiesMap: TEntityComponentMap
+   * **Exposed only for tests!**
+   */
+  readonly entitiesMap: TEntityComponentMap;
 
   /**
    * Create instance of Component and add it to Entity.
@@ -64,22 +67,22 @@ export interface IEcsWorld<TDependencies extends TComponentBase = TComponentBase
    * @param initialValues Optional array of initial constructor arguments.
    */
   addEntityComponent<
-    TComponents extends TComponentBase[],
-    U extends ElementType<TComponents>
+    TComponents extends TAnyConstructor[],
+    U extends OneOf<TComponents>
   >(
     entity: IEntity<TComponents>,
-    Component: IComponentConstructor<U>,
-    initialValues?: ConstructorParameters<IComponentConstructor<U>>
-  ): void
+    Component: IAbstractConstructor<U>,
+    initialValues?: ConstructorParameters<U>
+  ): void;
   /**
    * Get map of Component `name -> instance` linked to given Entity.
    *
    * @param entity Entity instance.
    */
-  getEntityComponents<T extends TComponentBase[]>(
+  getEntityComponents<T extends TAnyConstructor[]>(
     entity: IEntity<T>
-  ): ReadonlyMap<string, TComponentBase> | undefined
-    /**
+  ): ReadonlyMap<string, TAnyConstructor> | undefined;
+  /**
    * Create instance of Component and add it to Entity.
    * This doesn't modify Entity, but creates link in World between entity and created component instance.
    *
@@ -88,10 +91,10 @@ export interface IEcsWorld<TDependencies extends TComponentBase = TComponentBase
    * @param initialValues Optional array of initial constructor arguments.
    */
   removeEntityComponent<
-    TComponents extends TComponentBase[],
-    U extends ElementType<TComponents>
+    TComponents extends TAnyConstructor[],
+    U extends OneOf<TComponents>
   >(
     entity: IEntity<TComponents>,
-    Component: IComponentConstructor<U>
-  ): void
+    Component: IAbstractConstructor<U>
+  ): void;
 }

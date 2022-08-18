@@ -79,7 +79,7 @@ class ExampleComponent {
 /**
  * Define type for components that this system will handle.
  */
-type TExampleSystemComponents = [ExampleComponent]
+type TExampleSystemComponents = [typeof ExampleComponent]
 
 export default class ExampleSystem extends System<
   TExampleSystemComponents,

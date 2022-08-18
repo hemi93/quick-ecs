@@ -1,48 +1,47 @@
-import {ElementType,IComponentConstructor} from '../types'
-import {IEcsWorld} from '../world/types'
-import {IEntity} from './types'
+import { OneOf, IAbstractConstructor, TAnyConstructor } from "../types";
+import { IEcsWorld } from "../world/types";
+import { IEntity } from "./types";
 
-export default class Entity<TComponents extends Record<any, any>[]>
-  implements IEntity<TComponents> {
-  private readonly _world: IEcsWorld
+export default class Entity<TComponents extends TAnyConstructor[]>
+  implements IEntity<TComponents>
+{
+  private readonly _world: IEcsWorld;
 
   constructor(world: IEcsWorld) {
-    this._world = world
+    this._world = world;
   }
 
-  public addComponent = <U extends ElementType<TComponents>>(
-    Component: IComponentConstructor<U>,
-    initialValues?: ConstructorParameters<IComponentConstructor<U>>
+  public addComponent = <U extends OneOf<TComponents>>(
+    Component: U,
+    ...initialValues: ConstructorParameters<U>
   ): IEntity<TComponents> => {
     this._world.addEntityComponent<TComponents, U>(
       this,
       Component,
-      initialValues
-    )
+      ...initialValues
+    );
 
-    return this
-  }
+    return this;
+  };
 
-  public getComponent = <U extends ElementType<TComponents>>(
-    Component: IComponentConstructor<U>
-  ): U | undefined => this._world.getEntityComponents(this)?.get(Component.name) as U | undefined
+  public getComponent = <U extends OneOf<TComponents>>(
+    Component: IAbstractConstructor<U>
+  ): U | undefined =>
+    this._world.getEntityComponents(this)?.get(Component.name) as U | undefined;
 
-  public removeComponent = <U extends ElementType<TComponents>>(
-    Component: IComponentConstructor<U>
+  public removeComponent = <U extends OneOf<TComponents>>(
+    Component: IAbstractConstructor<U>
   ): IEntity<TComponents> => {
-    this._world.removeEntityComponent<TComponents, U>(
-      this,
-      Component
-    )
+    this._world.removeEntityComponent<TComponents, U>(this, Component);
 
-    return this
-  }
+    return this;
+  };
 
   /* istanbul ignore next */
   public debug = (): void => {
     console.debug({
       entity: this,
       components: this._world.getEntityComponents<TComponents>(this)
-    })
-  }
+    });
+  };
 }

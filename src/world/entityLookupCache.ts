@@ -1,11 +1,18 @@
-import {IEntity} from 'entity/types'
-import {TComponentConstructors} from 'types'
+import { IEntity } from "entity/types";
+import { TAnyConstructor } from "types";
 
-import {TEntityComponentMap} from './types'
+import { TEntityComponentMap } from "./types";
 
 interface IEntityLookupCache {
-  get: (components: TComponentConstructors<any>, entitiesMap: TEntityComponentMap) => readonly IEntity<any>[] | undefined
-  set: (components: TComponentConstructors<any>, entitiesMap: TEntityComponentMap, entities: readonly IEntity<any>[]) => void
+  get: (
+    components: TAnyConstructor[],
+    entitiesMap: TEntityComponentMap
+  ) => readonly IEntity<[]>[] | undefined;
+  set: (
+    components: TAnyConstructor[],
+    entitiesMap: TEntityComponentMap,
+    entities: readonly IEntity<[]>[]
+  ) => void;
 }
 
 /**
@@ -14,19 +21,24 @@ interface IEntityLookupCache {
  * This is based on WeakMaps, so no manual cleaning is needed.
  */
 export const getEntityLookupCache = (): IEntityLookupCache => {
-  const cache: WeakMap<TEntityComponentMap, WeakMap<TComponentConstructors<any>, readonly IEntity<any>[]>> = new WeakMap()
+  const cache: WeakMap<
+    TEntityComponentMap,
+    WeakMap<TAnyConstructor[], readonly IEntity<[]>[]>
+  > = new WeakMap();
 
-  return ({
-    get: (
-      components: TComponentConstructors<any>,
-      entitiesMap: TEntityComponentMap
-    ) => cache.get(entitiesMap)?.get(components),
+  return {
+    get: (components: TAnyConstructor[], entitiesMap: TEntityComponentMap) =>
+      cache.get(entitiesMap)?.get(components),
     set: (
-      components: TComponentConstructors<any>,
+      components: TAnyConstructor[],
       entitiesMap: TEntityComponentMap,
-      entities: readonly IEntity<any>[]
+      entities: readonly IEntity<[]>[]
     ) => {
-      cache.set(entitiesMap, cache.get(entitiesMap)?.set(components, entities) || new WeakMap([[components, entities]]))
+      cache.set(
+        entitiesMap,
+        cache.get(entitiesMap)?.set(components, entities) ||
+          new WeakMap([[components, entities]])
+      );
     }
-  })
-}
+  };
+};

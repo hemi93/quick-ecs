@@ -1,13 +1,13 @@
-export type TComponentBase = Record<any, any>
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
-export interface IComponentConstructor<T extends TComponentBase> {
-  new (...args: any): T
+export type TAnyConstructor = new (...args: any[]) => any;
+
+export interface IAbstractConstructor<T extends object> {
+  new (...args: any): T;
 }
 
-export type TComponentConstructors<T extends TComponentBase[]> = IComponentConstructor<
-  ElementType<T>
->[]
+export type TComponentConstructors<T extends TAnyConstructor[]> =
+  IAbstractConstructor<OneOf<T>>[];
 
-export type ElementType<T extends Array<any>> = T extends (infer U)[]
-  ? U
-  : never
+export type OneOf<T extends Array<any>> = T extends (infer U)[] ? U : never;
